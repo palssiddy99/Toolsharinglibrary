@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tool Sharing Library</title>
+  <style>
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { margin: 0; background-color: #f4f6f9; color: #333; }
+    header { background: #2c3e50; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+    .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+    .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-bottom: 2rem; }
+    h2 { margin-top: 0; color: #2c3e50; }
+    .form-group { margin-bottom: 1rem; }
+    label { display: block; margin-bottom: 0.4rem; font-weight: 600; }
+    input { width: 100%; padding: 0.6rem; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; }
+    button { background: #27ae60; color: white; border: none; padding: 0.7rem 1.5rem; border-radius: 4px; font-size: 1rem; cursor: pointer; font-weight: bold; }
+    button:hover { background: #219150; }
+    button.logout { background: #e74c3c; }
+    button.logout:hover { background: #c0392b; }
+    .tabs { display: flex; gap: 10px; margin-bottom: 1.5rem; }
+    .tab-btn { background: #bdc3c7; color: #2c3e50; }
+    .tab-btn.active { background: #2c3e50; color: white; }
+    .alert { padding: 0.8rem; border-radius: 4px; margin-bottom: 1rem; display: none; }
+    .alert-success { background: #d4edda; color: #155724; }
+    .alert-error { background: #f8d7da; color: #721c24; }
+    .hidden { display: none; }
+    .user-badge { display: flex; align-items: center; gap: 1rem; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h2>Tool Sharing Library</h2>
+    <div id="authNav" class="user-badge">
+      <span id="welcomeMsg" class="hidden"></span>
+      <button id="logoutBtn" class="logout hidden" onclick="handleLogout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div id="alertBox" class="alert"></div>
+
+    <!-- AUTH SECTION -->
+    <div id="authContainer" class="card">
+      <div class="tabs">
+        <button class="tab-btn active" id="loginTabBtn" onclick="switchTab('login')">Login</button>
+        <button class="tab-btn" id="registerTabBtn" onclick="switchTab('register')">Register</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="loginEmail" required placeholder="name@example.com" />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" required placeholder="******" />
+        </div>
+        <button type="submit">Sign In</button>
+      </form>
+
+      <!-- Register Form -->
+      <form id="registerForm" class="hidden" onsubmit="handleRegister(event)">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="regName" required placeholder="John Doe" />
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="regEmail" required placeholder="name@example.com" />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="regPassword" required placeholder="******" />
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="text" id="regPhone" placeholder="Optional phone number" />
+        </div>
+        <button type="submit">Create Account</button>
+      </form>
+    </div>
+
+    <!-- DASHBOARD SECTION (Shown after login) -->
+    <div id="dashboardContainer" class="card hidden">
+      <h2>Welcome to the Tool Library!</h2>
+      <p>You are authenticated. You can now browse community tools or list tools you want to share.</p>
+      <div style="margin-top: 1.5rem; padding: 1.5rem; background: #eef2f7; border-radius: 6px;">
+        <h3>Community Tools Hub</h3>
+        <p>Your authentication token is active and ready for tool listings and requests.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = '/api/auth';
+
+    function showAlert(message, type) {
+      const alertBox = document.getElementById('alertBox');
+      alertBox.textContent = message;
+      alertBox.className = `alert alert-${type}`;
+      alertBox.style.display = 'block';
+      setTimeout(() => { alertBox.style.display = 'none'; }, 4000);
+    }
+
+    function switchTab(tab) {
+      const loginForm = document.getElementById('loginForm');
+      const registerForm = document.getElementById('registerForm');
+      const loginTabBtn = document.getElementById('loginTabBtn');
+      const registerTabBtn = document.getElementById('registerTabBtn');
+
+      if (tab === 'login') {
+        loginForm.classList.remove('hidden');
+        registerForm.classList.add('hidden');
+        loginTabBtn.classList.add('active');
+        registerTabBtn.classList.remove('active');
+      } else {
+        loginForm.classList.add('hidden');
+        registerForm.classList.remove('hidden');
+        registerTabBtn.classList.add('active');
+        loginTabBtn.classList.remove('active');
+      }
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById('regName').value;
+      const email = document.getElementById('regEmail').value;
+      const password = document.getElementById('regPassword').value;
+      const phone = document.getElementById('regPhone').value;
+
+      try {
+        const res = await fetch(`${API_BASE}/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password, phone })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Registration failed');
+
+        showAlert('Registration successful! Please log in.', 'success');
+        document.getElementById('registerForm').reset();
+        switchTab('login');
+      } catch (err) {
+        showAlert(err.message, 'error');
+      }
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+
+      try {
+        const res = await fetch(`${API_BASE}/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Login failed');
+
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        showAlert('Logged in successfully!', 'success');
+        checkAuthState();
+      } catch (err) {
+        showAlert(err.message, 'error');
+      }
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      checkAuthState();
+    }
+
+    function checkAuthState() {
+      const token = localStorage.getItem('token');
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+      const authContainer = document.getElementById('authContainer');
+      const dashboardContainer = document.getElementById('dashboardContainer');
+      const welcomeMsg = document.getElementById('welcomeMsg');
+      const logoutBtn = document.getElementById('logoutBtn');
+
+      if (token && user.name) {
+        authContainer.classList.add('hidden');
+        dashboardContainer.classList.remove('hidden');
+        welcomeMsg.textContent = `Hello, ${user.name}`;
+        welcomeMsg.classList.remove('hidden');
+        logoutBtn.classList.remove('hidden');
+      } else {
+        authContainer.classList.remove('hidden');
+        dashboardContainer.classList.add('hidden');
+        welcomeMsg.classList.add('hidden');
+        logoutBtn.classList.add('hidden');
+      }
+    }
+
+    // Check auth on load
+    checkAuthState();
+  </script>
+</body>
+</html>

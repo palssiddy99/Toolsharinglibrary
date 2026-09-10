@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tool Sharing Library</title>
+  <style>
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { margin: 0; background-color: #f4f6f9; color: #333; }
+    header { background: #2c3e50; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+    .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+    .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-bottom: 2rem; }
+    h2 { margin-top: 0; color: #2c3e50; }
+    .form-group { margin-bottom: 1rem; }
+    label { display: block; margin-bottom: 0.4rem; font-weight: 600; }
+    input, select, textarea { width: 100%; padding: 0.6rem; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; }
+    button { background: #27ae60; color: white; border: none; padding: 0.7rem 1.5rem; border-radius: 4px; font-size: 1rem; cursor: pointer; font-weight: bold; }
+    button:hover { background: #219150; }
+    button.logout { background: #e74c3c; }
+    button.logout:hover { background: #c0392b; }
+    .tabs { display: flex; gap: 10px; margin-bottom: 1.5rem; }
+    .tab-btn { background: #bdc3c7; color: #2c3e50; }
+    .tab-btn.active { background: #2c3e50; color: white; }
+    .alert { padding: 0.8rem; border-radius: 4px; margin-bottom: 1rem; display: none; }
+    .alert-success { background: #d4edda; color: #155724; }
+    .alert-error { background: #f8d7da; color: #721c24; }
+    .hidden { display: none; }
+    .user-badge { display: flex; align-items: center; gap: 1rem; }
+    .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .tool-card { border: 1px solid #ddd; padding: 1rem; border-radius: 6px; background: #fafafa; }
+    .badge { display: inline-block; padding: 0.2rem 0.6rem; font-size: 0.8rem; border-radius: 4px; background: #27ae60; color: white; }
+    .badge.borrowed { background: #e67e22; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h2>Tool Sharing Library</h2>
+    <div id="authNav" class="user-badge">
+      <span id="welcomeMsg" class="hidden"></span>
+      <button id="logoutBtn" class="logout hidden" onclick="handleLogout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div id="alertBox" class="alert"></div>
+
+    <!-- AUTH SECTION -->
+    <div id="authContainer" class="card">
+      <div class="tabs">
+        <button class="tab-btn active" id="loginTabBtn" onclick="switchTab('login')">Login</button>
+        <button class="tab-btn" id="registerTabBtn" onclick="switchTab('register')">Register</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="loginEmail" required placeholder="user@example.com" />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" required placeholder="******" />
+        </div>
+        <button type="submit">Sign In</button>
+      </form>
+
+      <!-- Register Form -->
+      <form id="registerForm" class="hidden" onsubmit="handleRegister(event)">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="regName" required placeholder="John Doe" />
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="regEmail" required placeholder="user@example.com" />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="regPassword" required placeholder="******" />
+        </div>
+        <button type="submit">Create Account</button>
+      </form>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboardContainer" class="hidden">
+      <!-- Add Tool Form -->
+      <div class="card">
+        <h2>List a Tool for Sharing</h2>
+        <form id="toolForm" onsubmit="handleAddTool(event)">
+          <div class="form-group">
+            <label>Tool Name</label>
+            <input type="text" id="toolTitle" required placeholder="e.g., Bosch Cordless Drill" />
+          </div>
+          <div class="form-group">
+            <label>Category</label>
+            <select id="toolCategory">
+              <option value="Power Tools">Power Tools</option>
+              <option value="Gardening">Gardening</option>
+              <option value="Hand Tools">Hand Tools</option>
+              <option value="Carpentry">Carpentry</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea id="toolDesc" rows="2" placeholder="Condition, included bits/accessories..."></textarea>
+          </div>
+          <button type="submit">Add to Library</button>
+        </form>
+      </div>
+
+      <!-- Tool Catalog -->
+      <div class="card">
+        <h2>Available Community Tools</h2>
+        <div id="toolList" class="tool-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- BROWSER DATABASE ENGINE (LocalStorage) ---
+    function initDatabase() {
+      if (!localStorage.getItem('db_users')) {
+        localStorage.setItem('db_users', JSON.stringify([]));
+      }
+      if (!localStorage.getItem('db_tools')) {
+        const defaultTools = [
+          { id: 1, title: 'DeWalt Hammer Drill', category: 'Power Tools', desc: '18V cordless drill with 2 batteries', status: 'available', owner: 'Library Admin' },
+          { id: 2, title: 'Hedge Trimmer', category: 'Gardening', desc: 'Electric 500W hedge trimmer', status: 'available', owner: 'Library Admin' }
+        ];
+        localStorage.setItem('db_tools', JSON.stringify(defaultTools));
+      }
+    }
+    initDatabase();
+
+    function showAlert(message, type) {
+      const alertBox = document.getElementById('alertBox');
+      alertBox.textContent = message;
+      alertBox.className = `alert alert-${type}`;
+      alertBox.style.display = 'block';
+      setTimeout(() => { alertBox.style.display = 'none'; }, 3000);
+    }
+
+    function switchTab(tab) {
+      const loginForm = document.getElementById('loginForm');
+      const registerForm = document.getElementById('registerForm');
+      const loginTabBtn = document.getElementById('loginTabBtn');
+      const registerTabBtn = document.getElementById('registerTabBtn');
+
+      if (tab === 'login') {
+        loginForm.classList.remove('hidden');
+        registerForm.classList.add('hidden');
+        loginTabBtn.classList.add('active');
+        registerTabBtn.classList.remove('active');
+      } else {
+        loginForm.classList.add('hidden');
+        registerForm.classList.remove('hidden');
+        registerTabBtn.classList.add('active');
+        loginTabBtn.classList.remove('active');
+      }
+    }
+
+    // --- AUTHENTICATION ---
+    function handleRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim().toLowerCase();
+      const password = document.getElementById('regPassword').value;
+
+      const users = JSON.parse(localStorage.getItem('db_users'));
+      if (users.find(u => u.email === email)) {
+        showAlert('Email already registered!', 'error');
+        return;
+      }
+
+      users.push({ id: Date.now(), name, email, password });
+      localStorage.setItem('db_users', JSON.stringify(users));
+
+      showAlert('Registration successful! Please login.', 'success');
+      document.getElementById('registerForm').reset();
+      switchTab('login');
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+      const password = document.getElementById('loginPassword').value;
+
+      const users = JSON.parse(localStorage.getItem('db_users'));
+      const user = users.find(u => u.email === email && u.password === password);
+
+      if (!user) {
+        showAlert('Invalid email or password', 'error');
+        return;
+      }
+
+      localStorage.setItem('session_user', JSON.stringify({ name: user.name, email: user.email }));
+      showAlert('Logged in successfully!', 'success');
+      checkAuthState();
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('session_user');
+      checkAuthState();
+    }
+
+    function checkAuthState() {
+      const session = JSON.parse(localStorage.getItem('session_user') || 'null');
+      const authContainer = document.getElementById('authContainer');
+      const dashboardContainer = document.getElementById('dashboardContainer');
+      const welcomeMsg = document.getElementById('welcomeMsg');
+      const logoutBtn = document.getElementById('logoutBtn');
+
+      if (session) {
+        authContainer.classList.add('hidden');
+        dashboardContainer.classList.remove('hidden');
+        welcomeMsg.textContent = `Hello, ${session.name}`;
+        welcomeMsg.classList.remove('hidden');
+        logoutBtn.classList.remove('hidden');
+        renderTools();
+      } else {
+        authContainer.classList.remove('hidden');
+        dashboardContainer.classList.add('hidden');
+        welcomeMsg.classList.add('hidden');
+        logoutBtn.classList.add('hidden');
+      }
+    }
+
+    // --- TOOL OPERATIONS ---
+    function handleAddTool(e) {
+      e.preventDefault();
+      const title = document.getElementById('toolTitle').value;
+      const category = document.getElementById('toolCategory').value;
+      const desc = document.getElementById('toolDesc').value;
+      const session = JSON.parse(localStorage.getItem('session_user'));
+
+      const tools = JSON.parse(localStorage.getItem('db_tools'));
+      tools.push({
+        id: Date.now(),
+        title,
+        category,
+        desc,
+        status: 'available',
+        owner: session.name
+      });
+      localStorage.setItem('db_tools', JSON.stringify(tools));
+
+      showAlert('Tool added successfully!', 'success');
+      document.getElementById('toolForm').reset();
+      renderTools();
+    }
+
+    function borrowTool(id) {
+      const tools = JSON.parse(localStorage.getItem('db_tools'));
+      const tool = tools.find(t => t.id === id);
+      if (tool) {
+        tool.status = tool.status === 'available' ? 'borrowed' : 'available';
+        localStorage.setItem('db_tools', JSON.stringify(tools));
+        renderTools();
+      }
+    }
+
+    function renderTools() {
+      const tools = JSON.parse(localStorage.getItem('db_tools')) || [];
+      const list = document.getElementById('toolList');
+      list.innerHTML = '';
+
+      if (tools.length === 0) {
+        list.innerHTML = '<p>No tools available yet.</p>';
+        return;
+      }
+
+      tools.forEach(tool => {
+        const isBorrowed = tool.status === 'borrowed';
+        const card = document.createElement('div');
+        card.className = 'tool-card';
+        card.innerHTML = `
+          <h4>${tool.title}</h4>
+          <span class="badge ${isBorrowed ? 'borrowed' : ''}">${tool.category}</span>
+          <p style="font-size: 0.9rem; color: #555; margin: 0.8rem 0;">${tool.desc || 'No description provided.'}</p>
+          <p style="font-size: 0.8rem; color: #888;">Shared by: <b>${tool.owner}</b></p>
+          <button style="width: 100%; margin-top: 0.5rem; background: ${isBorrowed ? '#e67e22' : '#27ae60'};" onclick="borrowTool(${tool.id})">
+            ${isBorrowed ? 'Return Tool' : 'Borrow Tool'}
+          </button>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    checkAuthState();
+  </script>
+</body>
+</html>

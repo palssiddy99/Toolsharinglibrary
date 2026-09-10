@@ -3,165 +3,408 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tool Sharing Library</title>
+  <title>ToolShare — Community Tool Library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { margin: 0; background-color: #f4f6f9; color: #333; }
-    header { background: #2c3e50; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-    .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
-    .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-bottom: 2rem; }
-    h2 { margin-top: 0; color: #2c3e50; }
-    .form-group { margin-bottom: 1rem; }
-    label { display: block; margin-bottom: 0.4rem; font-weight: 600; }
-    input, select, textarea { width: 100%; padding: 0.6rem; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; }
-    button { background: #27ae60; color: white; border: none; padding: 0.7rem 1.5rem; border-radius: 4px; font-size: 1rem; cursor: pointer; font-weight: bold; }
-    button:hover { background: #219150; }
-    button.logout { background: #e74c3c; }
-    button.logout:hover { background: #c0392b; }
-    .tabs { display: flex; gap: 10px; margin-bottom: 1.5rem; }
-    .tab-btn { background: #bdc3c7; color: #2c3e50; }
-    .tab-btn.active { background: #2c3e50; color: white; }
-    .alert { padding: 0.8rem; border-radius: 4px; margin-bottom: 1rem; display: none; }
-    .alert-success { background: #d4edda; color: #155724; }
-    .alert-error { background: #f8d7da; color: #721c24; }
-    .hidden { display: none; }
-    .user-badge { display: flex; align-items: center; gap: 1rem; }
-    .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; margin-top: 1rem; }
-    .tool-card { border: 1px solid #ddd; padding: 1rem; border-radius: 6px; background: #fafafa; }
-    .badge { display: inline-block; padding: 0.2rem 0.6rem; font-size: 0.8rem; border-radius: 4px; background: #27ae60; color: white; }
-    .badge.borrowed { background: #e67e22; }
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --success: #16a34a;
+      --warning: #d97706;
+      --danger: #dc2626;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; }
+    body { background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* Navigation */
+    nav {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.85rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .brand {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .nav-links { display: flex; gap: 0.6rem; align-items: center; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.5rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .nav-links a:hover { color: var(--text); background: #f1f5f9; }
+    .nav-links a.active { color: var(--primary); background: #eff6ff; font-weight: 600; }
+    .btn-logout {
+      background: #fee2e2;
+      color: var(--danger);
+      border: 1px solid #fca5a5;
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .btn-logout:hover { background: #fecaca; }
+
+    /* Container & Scaffolding */
+    .container { max-width: 1100px; margin: 2rem auto; padding: 0 1.5rem; flex: 1; width: 100%; }
+    .page-view { display: none; }
+    .page-view.active { display: block; animation: fadeIn 0.2s ease-in; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .hero-header { margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; }
+    .hero-header h2 { font-size: 1.6rem; font-weight: 700; color: var(--text); }
+    .hero-header p { color: var(--muted); font-size: 0.95rem; margin-top: 0.2rem; }
+
+    /* Filter Controls */
+    .catalog-bar {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .search-input {
+      flex: 2;
+      min-width: 220px;
+      padding: 0.65rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+    .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.12); }
+    .filter-select {
+      flex: 1;
+      min-width: 160px;
+      padding: 0.65rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      background: #fff;
+    }
+
+    /* Forms */
+    .form-group { margin-bottom: 1.25rem; }
+    label { display: block; margin-bottom: 0.4rem; font-size: 0.9rem; font-weight: 600; color: #334155; }
+    input, select, textarea {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: var(--text);
+      transition: border-color 0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+    }
+    .btn-submit {
+      width: 100%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-submit:hover { background: var(--primary-hover); }
+
+    /* Tool Grid & Cards */
+    .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
+    .tool-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .tool-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.08); }
+    .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
+    .badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.6rem;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
+    }
+    .badge-category { background: #eff6ff; color: var(--primary); }
+    .badge-status { background: #dcfce7; color: var(--success); }
+    .badge-status.borrowed { background: #fef3c7; color: var(--warning); }
+    
+    .tool-title { font-size: 1.15rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
+    .tool-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.45; margin-bottom: 1.2rem; flex-grow: 1; }
+    .tool-meta { font-size: 0.82rem; color: #94a3b8; margin-bottom: 1rem; border-top: 1px solid #f1f5f9; padding-top: 0.8rem; }
+
+    .btn-action {
+      width: 100%;
+      padding: 0.65rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.92rem;
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-borrow { background: var(--primary); color: white; }
+    .btn-borrow:hover { background: var(--primary-hover); }
+    .btn-return { background: var(--warning); color: white; }
+    .btn-disabled { background: #f1f5f9; color: #94a3b8; cursor: not-allowed; }
+
+    /* Floating Alert */
+    .alert-banner {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      padding: 0.9rem 1.4rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+      display: none;
+      z-index: 2000;
+      animation: slideUp 0.2s ease-out;
+    }
+    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .alert-success { background: #15803d; color: white; }
+    .alert-error { background: var(--danger); color: white; }
+
+    /* Auth Tab Buttons */
+    .auth-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1.5rem; background: #f1f5f9; padding: 0.3rem; border-radius: 8px; }
+    .auth-toggle button { border: none; padding: 0.55rem; background: transparent; font-weight: 600; font-size: 0.9rem; border-radius: 6px; cursor: pointer; color: var(--muted); }
+    .auth-toggle button.active { background: white; color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
   </style>
 </head>
 <body>
 
-  <header>
-    <h2>Tool Sharing Library</h2>
-    <div id="authNav" class="user-badge">
-      <span id="welcomeMsg" class="hidden"></span>
-      <button id="logoutBtn" class="logout hidden" onclick="handleLogout()">Logout</button>
-    </div>
-  </header>
+  <nav>
+    <div class="brand" onclick="navigate('page-tools')">🛠️ ToolShare</div>
+    <ul class="nav-links">
+      <li><a id="nav-tools" class="active" onclick="navigate('page-tools')">Browse Catalog</a></li>
+      <li><a id="nav-add" onclick="navigate('page-add')">List a Tool</a></li>
+      <li><a id="nav-my-borrows" onclick="navigate('page-my-borrows')">My Borrows</a></li>
+      <li><a id="nav-auth" onclick="navigate('page-auth')">Sign In</a></li>
+      <li><button id="nav-logout" class="btn-logout" style="display: none;" onclick="logout()">Sign Out</button></li>
+    </ul>
+  </nav>
 
   <div class="container">
-    <div id="alertBox" class="alert"></div>
+    <div id="alertBox" class="alert-banner"></div>
 
-    <!-- AUTH SECTION -->
-    <div id="authContainer" class="card">
-      <div class="tabs">
-        <button class="tab-btn active" id="loginTabBtn" onclick="switchTab('login')">Login</button>
-        <button class="tab-btn" id="registerTabBtn" onclick="switchTab('register')">Register</button>
+    <!-- 1. BROWSE CATALOG PAGE -->
+    <section id="page-tools" class="page-view active">
+      <div class="hero-header">
+        <div>
+          <h2>Community Tool Library</h2>
+          <p>Borrow verified workshop and home repair tools from members near you.</p>
+        </div>
       </div>
 
-      <!-- Login Form -->
-      <form id="loginForm" onsubmit="handleLogin(event)">
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="loginEmail" required placeholder="user@example.com" />
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="loginPassword" required placeholder="******" />
-        </div>
-        <button type="submit">Sign In</button>
-      </form>
+      <div class="catalog-bar">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search tools by keyword..." oninput="filterTools()" />
+        <select id="categoryFilter" class="filter-select" onchange="filterTools()">
+          <option value="all">All Categories</option>
+          <option value="Power Tools">Power Tools</option>
+          <option value="Gardening">Gardening</option>
+          <option value="Hand Tools">Hand Tools</option>
+          <option value="Painting">Painting</option>
+        </select>
+      </div>
 
-      <!-- Register Form -->
-      <form id="registerForm" class="hidden" onsubmit="handleRegister(event)">
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" id="regName" required placeholder="John Doe" />
-        </div>
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="regEmail" required placeholder="user@example.com" />
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="regPassword" required placeholder="******" />
-        </div>
-        <button type="submit">Create Account</button>
-      </form>
-    </div>
+      <div id="toolCatalog" class="tool-grid"></div>
+    </section>
 
-    <!-- DASHBOARD -->
-    <div id="dashboardContainer" class="hidden">
-      <!-- Add Tool Form -->
-      <div class="card">
-        <h2>List a Tool for Sharing</h2>
-        <form id="toolForm" onsubmit="handleAddTool(event)">
+    <!-- 2. ADD TOOL PAGE -->
+    <section id="page-add" class="page-view">
+      <div class="card" style="max-width: 550px; margin: 0 auto;">
+        <h2 style="margin-bottom: 0.4rem;">List an Equipment</h2>
+        <p style="color: var(--muted); font-size: 0.92rem; margin-bottom: 1.5rem;">Help neighbors reduce waste by sharing your spare tools.</p>
+        
+        <form onsubmit="handleCreateTool(event)">
           <div class="form-group">
-            <label>Tool Name</label>
-            <input type="text" id="toolTitle" required placeholder="e.g., Bosch Cordless Drill" />
+            <label>Tool Title</label>
+            <input type="text" id="toolName" placeholder="e.g., Bosch 18V Cordless Jigsaw" required />
           </div>
           <div class="form-group">
             <label>Category</label>
-            <select id="toolCategory">
+            <select id="toolCat">
               <option value="Power Tools">Power Tools</option>
               <option value="Gardening">Gardening</option>
               <option value="Hand Tools">Hand Tools</option>
-              <option value="Carpentry">Carpentry</option>
+              <option value="Painting">Painting</option>
             </select>
           </div>
           <div class="form-group">
-            <label>Description</label>
-            <textarea id="toolDesc" rows="2" placeholder="Condition, included bits/accessories..."></textarea>
+            <label>Included Accessories & Condition</label>
+            <textarea id="toolDescription" rows="3" placeholder="Condition details, extra blades, carry bag..."></textarea>
           </div>
-          <button type="submit">Add to Library</button>
+          <button type="submit" class="btn-submit">Add Tool to Inventory</button>
         </form>
       </div>
+    </section>
 
-      <!-- Tool Catalog -->
-      <div class="card">
-        <h2>Available Community Tools</h2>
-        <div id="toolList" class="tool-grid"></div>
+    <!-- 3. MY BORROWS PAGE -->
+    <section id="page-my-borrows" class="page-view">
+      <div class="hero-header">
+        <div>
+          <h2>My Active Borrows</h2>
+          <p>Manage the equipment you currently have checked out.</p>
+        </div>
       </div>
-    </div>
+      <div id="borrowedCatalog" class="tool-grid"></div>
+    </section>
+
+    <!-- 4. SIGN IN / REGISTER PAGE -->
+    <section id="page-auth" class="page-view">
+      <div class="card" style="max-width: 440px; margin: 0 auto;">
+        <div class="auth-toggle">
+          <button type="button" id="tabBtnLogin" class="active" onclick="toggleAuth('login')">Sign In</button>
+          <button type="button" id="tabBtnReg" onclick="toggleAuth('reg')">Create Account</button>
+        </div>
+
+        <form id="formLogin" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="loginEmail" required placeholder="name@domain.com" />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="loginPassword" required placeholder="••••••••" />
+          </div>
+          <button type="submit" class="btn-submit">Sign In</button>
+        </form>
+
+        <form id="formRegister" style="display: none;" onsubmit="handleRegister(event)">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="regName" required placeholder="John Doe" />
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="regEmail" required placeholder="name@domain.com" />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="regPassword" required placeholder="••••••••" />
+          </div>
+          <button type="submit" class="btn-submit">Register</button>
+        </form>
+      </div>
+    </section>
   </div>
 
   <script>
-    // --- BROWSER DATABASE ENGINE (LocalStorage) ---
+    // --- LOCAL DATABASE INIT ---
     function initDatabase() {
-      if (!localStorage.getItem('db_users')) {
-        localStorage.setItem('db_users', JSON.stringify([]));
-      }
+      if (!localStorage.getItem('db_users')) localStorage.setItem('db_users', JSON.stringify([]));
       if (!localStorage.getItem('db_tools')) {
-        const defaultTools = [
-          { id: 1, title: 'DeWalt Hammer Drill', category: 'Power Tools', desc: '18V cordless drill with 2 batteries', status: 'available', owner: 'Library Admin' },
-          { id: 2, title: 'Hedge Trimmer', category: 'Gardening', desc: 'Electric 500W hedge trimmer', status: 'available', owner: 'Library Admin' }
+        const seedTools = [
+          { id: 101, name: 'DeWalt 20V Cordless Drill', cat: 'Power Tools', desc: 'Brushless drill kit with 2 lithium batteries and hard case.', status: 'available', owner: 'Alex M.', borrower: null },
+          { id: 102, name: 'Telescopic Garden Lopper', cat: 'Gardening', desc: 'Compound action tree branch trimmer with 3m reach.', status: 'available', owner: 'Library Admin', borrower: null },
+          { id: 103, name: '7-Inch Wet Tile Saw', cat: 'Power Tools', desc: 'Includes continuous rim diamond blade and water reservoir.', status: 'available', owner: 'Library Admin', borrower: null },
+          { id: 104, name: 'Laser Cross-Line Level', cat: 'Hand Tools', desc: 'Self-leveling 360-degree vertical and horizontal green beam.', status: 'available', owner: 'David K.', borrower: null }
         ];
-        localStorage.setItem('db_tools', JSON.stringify(defaultTools));
+        localStorage.setItem('db_tools', JSON.stringify(seedTools));
       }
     }
     initDatabase();
 
-    function showAlert(message, type) {
-      const alertBox = document.getElementById('alertBox');
-      alertBox.textContent = message;
-      alertBox.className = `alert alert-${type}`;
-      alertBox.style.display = 'block';
-      setTimeout(() => { alertBox.style.display = 'none'; }, 3000);
+    // --- NAVIGATION ENGINE ---
+    function navigate(pageId) {
+      document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+
+      const target = document.getElementById(pageId);
+      if (target) target.classList.add('active');
+
+      const mapping = {
+        'page-tools': 'nav-tools',
+        'page-add': 'nav-add',
+        'page-my-borrows': 'nav-my-borrows',
+        'page-auth': 'nav-auth'
+      };
+      if (mapping[pageId]) document.getElementById(mapping[pageId]).classList.add('active');
+
+      renderAll();
     }
 
-    function switchTab(tab) {
-      const loginForm = document.getElementById('loginForm');
-      const registerForm = document.getElementById('registerForm');
-      const loginTabBtn = document.getElementById('loginTabBtn');
-      const registerTabBtn = document.getElementById('registerTabBtn');
-
-      if (tab === 'login') {
-        loginForm.classList.remove('hidden');
-        registerForm.classList.add('hidden');
-        loginTabBtn.classList.add('active');
-        registerTabBtn.classList.remove('active');
-      } else {
-        loginForm.classList.add('hidden');
-        registerForm.classList.remove('hidden');
-        registerTabBtn.classList.add('active');
-        loginTabBtn.classList.remove('active');
-      }
+    // --- NOTIFICATION ALERT ---
+    function notify(msg, type = 'success') {
+      const box = document.getElementById('alertBox');
+      box.textContent = msg;
+      box.className = `alert-banner alert-${type}`;
+      box.style.display = 'block';
+      setTimeout(() => { box.style.display = 'none'; }, 3200);
     }
 
     // --- AUTHENTICATION ---
+    function toggleAuth(type) {
+      document.getElementById('formLogin').style.display = type === 'login' ? 'block' : 'none';
+      document.getElementById('formRegister').style.display = type === 'reg' ? 'block' : 'none';
+      document.getElementById('tabBtnLogin').className = type === 'login' ? 'active' : '';
+      document.getElementById('tabBtnReg').className = type === 'reg' ? 'active' : '';
+    }
+
+    function checkAuth() {
+      const session = JSON.parse(localStorage.getItem('session_user') || 'null');
+      const authLink = document.getElementById('nav-auth');
+      const logoutBtn = document.getElementById('nav-logout');
+
+      if (session) {
+        authLink.textContent = `👤 ${session.name}`;
+        logoutBtn.style.display = 'inline-block';
+      } else {
+        authLink.textContent = 'Sign In';
+        logoutBtn.style.display = 'none';
+      }
+    }
+
     function handleRegister(e) {
       e.preventDefault();
       const name = document.getElementById('regName').value.trim();
@@ -170,16 +413,16 @@
 
       const users = JSON.parse(localStorage.getItem('db_users'));
       if (users.find(u => u.email === email)) {
-        showAlert('Email already registered!', 'error');
-        return;
+        return notify('Email is already registered!', 'error');
       }
 
       users.push({ id: Date.now(), name, email, password });
       localStorage.setItem('db_users', JSON.stringify(users));
+      localStorage.setItem('session_user', JSON.stringify({ name, email }));
 
-      showAlert('Registration successful! Please login.', 'success');
-      document.getElementById('registerForm').reset();
-      switchTab('login');
+      notify('Account registered successfully!');
+      checkAuth();
+      navigate('page-tools');
     }
 
     function handleLogin(e) {
@@ -190,105 +433,168 @@
       const users = JSON.parse(localStorage.getItem('db_users'));
       const user = users.find(u => u.email === email && u.password === password);
 
-      if (!user) {
-        showAlert('Invalid email or password', 'error');
-        return;
-      }
+      if (!user) return notify('Invalid email address or password', 'error');
 
       localStorage.setItem('session_user', JSON.stringify({ name: user.name, email: user.email }));
-      showAlert('Logged in successfully!', 'success');
-      checkAuthState();
+      notify(`Welcome back, ${user.name}!`);
+      checkAuth();
+      navigate('page-tools');
     }
 
-    function handleLogout() {
+    function logout() {
       localStorage.removeItem('session_user');
-      checkAuthState();
+      checkAuth();
+      notify('Signed out.');
+      navigate('page-tools');
     }
 
-    function checkAuthState() {
-      const session = JSON.parse(localStorage.getItem('session_user') || 'null');
-      const authContainer = document.getElementById('authContainer');
-      const dashboardContainer = document.getElementById('dashboardContainer');
-      const welcomeMsg = document.getElementById('welcomeMsg');
-      const logoutBtn = document.getElementById('logoutBtn');
-
-      if (session) {
-        authContainer.classList.add('hidden');
-        dashboardContainer.classList.remove('hidden');
-        welcomeMsg.textContent = `Hello, ${session.name}`;
-        welcomeMsg.classList.remove('hidden');
-        logoutBtn.classList.remove('hidden');
-        renderTools();
-      } else {
-        authContainer.classList.remove('hidden');
-        dashboardContainer.classList.add('hidden');
-        welcomeMsg.classList.add('hidden');
-        logoutBtn.classList.add('hidden');
-      }
-    }
-
-    // --- TOOL OPERATIONS ---
-    function handleAddTool(e) {
+    // --- TOOL ACTIONS ---
+    function handleCreateTool(e) {
       e.preventDefault();
-      const title = document.getElementById('toolTitle').value;
-      const category = document.getElementById('toolCategory').value;
-      const desc = document.getElementById('toolDesc').value;
-      const session = JSON.parse(localStorage.getItem('session_user'));
+      const session = JSON.parse(localStorage.getItem('session_user') || 'null');
+      if (!session) {
+        notify('Sign in to list items in the library.', 'error');
+        return navigate('page-auth');
+      }
 
       const tools = JSON.parse(localStorage.getItem('db_tools'));
-      tools.push({
+      tools.unshift({
         id: Date.now(),
-        title,
-        category,
-        desc,
+        name: document.getElementById('toolName').value,
+        cat: document.getElementById('toolCat').value,
+        desc: document.getElementById('toolDescription').value,
         status: 'available',
-        owner: session.name
+        owner: session.name,
+        borrower: null
       });
-      localStorage.setItem('db_tools', JSON.stringify(tools));
 
-      showAlert('Tool added successfully!', 'success');
-      document.getElementById('toolForm').reset();
-      renderTools();
+      localStorage.setItem('db_tools', JSON.stringify(tools));
+      e.target.reset();
+      notify('Tool published to catalog!');
+      navigate('page-tools');
     }
 
-    function borrowTool(id) {
+    function toggleBorrow(toolId) {
+      const session = JSON.parse(localStorage.getItem('session_user') || 'null');
+      if (!session) {
+        notify('Please sign in to borrow or return tools.', 'error');
+        return navigate('page-auth');
+      }
+
       const tools = JSON.parse(localStorage.getItem('db_tools'));
-      const tool = tools.find(t => t.id === id);
-      if (tool) {
-        tool.status = tool.status === 'available' ? 'borrowed' : 'available';
+      const item = tools.find(t => t.id === toolId);
+
+      if (item) {
+        if (item.status === 'available') {
+          item.status = 'borrowed';
+          item.borrower = session.email;
+          notify(`You checked out: ${item.name}`);
+        } else if (item.borrower === session.email) {
+          item.status = 'available';
+          item.borrower = null;
+          notify(`Returned: ${item.name}`);
+        }
         localStorage.setItem('db_tools', JSON.stringify(tools));
-        renderTools();
+        renderAll();
       }
     }
 
-    function renderTools() {
-      const tools = JSON.parse(localStorage.getItem('db_tools')) || [];
-      const list = document.getElementById('toolList');
-      list.innerHTML = '';
+    // --- RENDER & FILTER ---
+    function filterTools() {
+      renderCatalog();
+    }
 
-      if (tools.length === 0) {
-        list.innerHTML = '<p>No tools available yet.</p>';
+    function renderCatalog() {
+      const tools = JSON.parse(localStorage.getItem('db_tools') || '[]');
+      const session = JSON.parse(localStorage.getItem('session_user') || 'null');
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const selectedCategory = document.getElementById('categoryFilter').value;
+
+      const filtered = tools.filter(t => {
+        const matchesQuery = t.name.toLowerCase().includes(query) || (t.desc && t.desc.toLowerCase().includes(query));
+        const matchesCat = selectedCategory === 'all' || t.cat === selectedCategory;
+        return matchesQuery && matchesCat;
+      });
+
+      const catalog = document.getElementById('toolCatalog');
+      if (filtered.length === 0) {
+        catalog.innerHTML = '<p style="color: var(--muted); grid-column: 1/-1;">No matching tools found in the catalog.</p>';
         return;
       }
 
-      tools.forEach(tool => {
-        const isBorrowed = tool.status === 'borrowed';
-        const card = document.createElement('div');
-        card.className = 'tool-card';
-        card.innerHTML = `
-          <h4>${tool.title}</h4>
-          <span class="badge ${isBorrowed ? 'borrowed' : ''}">${tool.category}</span>
-          <p style="font-size: 0.9rem; color: #555; margin: 0.8rem 0;">${tool.desc || 'No description provided.'}</p>
-          <p style="font-size: 0.8rem; color: #888;">Shared by: <b>${tool.owner}</b></p>
-          <button style="width: 100%; margin-top: 0.5rem; background: ${isBorrowed ? '#e67e22' : '#27ae60'};" onclick="borrowTool(${tool.id})">
-            ${isBorrowed ? 'Return Tool' : 'Borrow Tool'}
-          </button>
+      catalog.innerHTML = filtered.map(t => {
+        const isBorrowed = t.status === 'borrowed';
+        const isMine = session && t.borrower === session.email;
+
+        let actionBtn = '';
+        if (!isBorrowed) {
+          actionBtn = `<button class="btn-action btn-borrow" onclick="toggleBorrow(${t.id})">Borrow Tool</button>`;
+        } else if (isMine) {
+          actionBtn = `<button class="btn-action btn-return" onclick="toggleBorrow(${t.id})">Return to Library</button>`;
+        } else {
+          actionBtn = `<button class="btn-action btn-disabled" disabled>Currently Borrowed</button>`;
+        }
+
+        return `
+          <div class="tool-card">
+            <div>
+              <div class="card-top">
+                <span class="badge badge-category">${t.cat}</span>
+                <span class="badge badge-status ${isBorrowed ? 'borrowed' : ''}">${isBorrowed ? 'Borrowed' : 'Available'}</span>
+              </div>
+              <div class="tool-title">${t.name}</div>
+              <div class="tool-desc">${t.desc || 'No specific notes provided.'}</div>
+            </div>
+            <div>
+              <div class="tool-meta">Shared by <b>${t.owner}</b></div>
+              ${actionBtn}
+            </div>
+          </div>
         `;
-        list.appendChild(card);
-      });
+      }).join('');
     }
 
-    checkAuthState();
+    function renderMyBorrows() {
+      const tools = JSON.parse(localStorage.getItem('db_tools') || '[]');
+      const session = JSON.parse(localStorage.getItem('session_user') || 'null');
+      const target = document.getElementById('borrowedCatalog');
+
+      if (!session) {
+        target.innerHTML = '<p style="color: var(--muted); grid-column: 1/-1;">Please sign in to inspect your borrowed items.</p>';
+        return;
+      }
+
+      const activeBorrows = tools.filter(t => t.borrower === session.email);
+      if (activeBorrows.length === 0) {
+        target.innerHTML = '<p style="color: var(--muted); grid-column: 1/-1;">You do not currently have any equipment checked out.</p>';
+        return;
+      }
+
+      target.innerHTML = activeBorrows.map(t => `
+        <div class="tool-card">
+          <div>
+            <div class="card-top">
+              <span class="badge badge-category">${t.cat}</span>
+              <span class="badge badge-status borrowed">Checked Out</span>
+            </div>
+            <div class="tool-title">${t.name}</div>
+            <div class="tool-desc">${t.desc || ''}</div>
+          </div>
+          <div>
+            <div class="tool-meta">Owner: <b>${t.owner}</b></div>
+            <button class="btn-action btn-return" onclick="toggleBorrow(${t.id})">Return Equipment</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderAll() {
+      renderCatalog();
+      renderMyBorrows();
+    }
+
+    checkAuth();
+    renderAll();
   </script>
 </body>
 </html>

@@ -3,35 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ToolShare — Community Tool Library</title>
+  <title>ToolShare — Community Hardware & Gear Exchange</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
-      --success: #16a34a;
-      --warning: #d97706;
-      --danger: #dc2626;
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --accent: #06b6d4;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
       --bg: #f8fafc;
       --card-bg: #ffffff;
       --text: #0f172a;
-      --muted: #64748b;
+      --text-muted: #64748b;
       --border: #e2e8f0;
-      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
-      --radius: 12px;
+      --radius: 14px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 8px 24px -4px rgba(15,23,42,0.08);
+      --shadow-hover: 0 16px 32px -6px rgba(79,70,229,0.12);
     }
 
     * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; }
     body { background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
 
-    /* Navigation */
+    /* Modern Navbar */
     nav {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(8px);
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
-      padding: 0.85rem 2rem;
+      padding: 1rem 2.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -40,272 +43,300 @@
       z-index: 1000;
     }
     .brand {
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--primary);
+      font-size: 1.35rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
-    .nav-links { display: flex; gap: 0.6rem; align-items: center; list-style: none; }
+    .nav-links { display: flex; gap: 0.75rem; align-items: center; list-style: none; }
     .nav-links a {
-      color: var(--muted);
+      color: var(--text-muted);
       text-decoration: none;
-      padding: 0.5rem 0.9rem;
-      border-radius: 8px;
+      padding: 0.55rem 1rem;
+      border-radius: 9999px;
       font-size: 0.92rem;
-      font-weight: 500;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.2s ease;
     }
     .nav-links a:hover { color: var(--text); background: #f1f5f9; }
-    .nav-links a.active { color: var(--primary); background: #eff6ff; font-weight: 600; }
+    .nav-links a.active { color: white; background: var(--primary); box-shadow: 0 4px 12px rgba(79,70,229,0.25); }
+    
     .btn-logout {
       background: #fee2e2;
       color: var(--danger);
-      border: 1px solid #fca5a5;
-      padding: 0.45rem 0.9rem;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      font-weight: 600;
+      border: none;
+      padding: 0.55rem 1.1rem;
+      border-radius: 9999px;
+      font-size: 0.88rem;
+      font-weight: 700;
       cursor: pointer;
-      transition: 0.2s;
+      transition: all 0.2s;
     }
-    .btn-logout:hover { background: #fecaca; }
+    .btn-logout:hover { background: #fca5a5; }
 
-    /* Container & Scaffolding */
-    .container { max-width: 1100px; margin: 2rem auto; padding: 0 1.5rem; flex: 1; width: 100%; }
+    /* Layout */
+    .container { max-width: 1180px; margin: 2.5rem auto; padding: 0 1.5rem; flex: 1; width: 100%; }
     .page-view { display: none; }
-    .page-view.active { display: block; animation: fadeIn 0.2s ease-in; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    .page-view.active { display: block; animation: slideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes slideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
+    /* Hero / Search Section */
+    .hero-banner {
+      background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
+      padding: 3rem 2.5rem;
+      border-radius: 20px;
+      color: white;
+      margin-bottom: 2.5rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 36px -8px rgba(79,70,229,0.3);
+    }
+    .hero-banner h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+    .hero-banner p { font-size: 1.05rem; opacity: 0.9; max-width: 600px; margin-bottom: 2rem; }
+
+    .search-wrapper {
+      display: flex;
+      gap: 0.8rem;
+      background: white;
+      padding: 0.5rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      flex-wrap: wrap;
+    }
+    .search-wrapper input {
+      flex: 3;
+      min-width: 220px;
+      border: none;
+      padding: 0.8rem 1.2rem;
+      font-size: 1rem;
+      outline: none;
+      border-radius: 8px;
+    }
+    .search-wrapper select {
+      flex: 1.2;
+      min-width: 160px;
+      border: 1px solid var(--border);
+      padding: 0.8rem 1rem;
+      font-size: 0.95rem;
+      border-radius: 8px;
+      outline: none;
+      background: #f8fafc;
+      font-weight: 600;
+    }
+
+    /* Cards */
     .card {
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 2rem;
+      box-shadow: var(--shadow-md);
+      padding: 2.2rem;
       margin-bottom: 2rem;
     }
 
-    .hero-header { margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; }
-    .hero-header h2 { font-size: 1.6rem; font-weight: 700; color: var(--text); }
-    .hero-header p { color: var(--muted); font-size: 0.95rem; margin-top: 0.2rem; }
-
-    /* Filter Controls */
-    .catalog-bar {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-    }
-    .search-input {
-      flex: 2;
-      min-width: 220px;
-      padding: 0.65rem 1rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 0.95rem;
-      outline: none;
-    }
-    .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.12); }
-    .filter-select {
-      flex: 1;
-      min-width: 160px;
-      padding: 0.65rem 1rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 0.95rem;
-      background: #fff;
-    }
-
-    /* Forms */
-    .form-group { margin-bottom: 1.25rem; }
-    label { display: block; margin-bottom: 0.4rem; font-size: 0.9rem; font-weight: 600; color: #334155; }
-    input, select, textarea {
-      width: 100%;
-      padding: 0.7rem 0.9rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 0.95rem;
-      color: var(--text);
-      transition: border-color 0.2s;
-    }
-    input:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
-    }
-    .btn-submit {
-      width: 100%;
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .btn-submit:hover { background: var(--primary-hover); }
-
-    /* Tool Grid & Cards */
-    .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
+    /* Tool Grid */
+    .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.5rem; }
     .tool-card {
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 1.4rem;
+      padding: 1.5rem;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
     }
-    .tool-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.08); }
-    .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
-    .badge {
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 0.25rem 0.6rem;
-      border-radius: 9999px;
-      text-transform: uppercase;
-      letter-spacing: 0.025em;
-    }
-    .badge-category { background: #eff6ff; color: var(--primary); }
-    .badge-status { background: #dcfce7; color: var(--success); }
-    .badge-status.borrowed { background: #fef3c7; color: var(--warning); }
+    .tool-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: #cbd5e1; }
     
-    .tool-title { font-size: 1.15rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
-    .tool-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.45; margin-bottom: 1.2rem; flex-grow: 1; }
-    .tool-meta { font-size: 0.82rem; color: #94a3b8; margin-bottom: 1rem; border-top: 1px solid #f1f5f9; padding-top: 0.8rem; }
+    .tool-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
+    .tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.3rem 0.65rem;
+      border-radius: 6px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .tag-cat { background: #e0e7ff; color: var(--primary); }
+    .tag-status { background: #dcfce7; color: var(--success); }
+    .tag-status.borrowed { background: #fef3c7; color: var(--warning); }
+
+    .tool-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.4rem; color: #1e293b; }
+    .tool-desc { color: var(--text-muted); font-size: 0.92rem; line-height: 1.5; margin-bottom: 1.4rem; flex-grow: 1; }
+    .tool-footer { border-top: 1px solid #f1f5f9; padding-top: 1rem; display: flex; flex-direction: column; gap: 0.8rem; }
+    .owner-info { font-size: 0.82rem; color: #94a3b8; display: flex; justify-content: space-between; }
 
     .btn-action {
       width: 100%;
-      padding: 0.65rem;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.92rem;
+      padding: 0.75rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.95rem;
       border: none;
       cursor: pointer;
-      transition: background 0.15s;
+      transition: all 0.2s;
     }
     .btn-borrow { background: var(--primary); color: white; }
     .btn-borrow:hover { background: var(--primary-hover); }
     .btn-return { background: var(--warning); color: white; }
     .btn-disabled { background: #f1f5f9; color: #94a3b8; cursor: not-allowed; }
 
-    /* Floating Alert */
-    .alert-banner {
+    /* Notice Banner for Zero/Suggested Results */
+    .fallback-banner {
+      grid-column: 1 / -1;
+      background: #eff6ff;
+      border: 1px dashed var(--primary);
+      padding: 1.2rem;
+      border-radius: 12px;
+      color: var(--primary-hover);
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    /* Forms */
+    .form-group { margin-bottom: 1.25rem; }
+    label { display: block; margin-bottom: 0.4rem; font-size: 0.9rem; font-weight: 700; color: #334155; }
+    input, select, textarea {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.2s;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(79,70,229,0.12); }
+    .btn-submit {
+      width: 100%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.85rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-submit:hover { background: var(--primary-hover); }
+
+    /* Alert Toast */
+    .toast {
       position: fixed;
       bottom: 2rem;
       right: 2rem;
-      padding: 0.9rem 1.4rem;
-      border-radius: 8px;
+      padding: 1rem 1.6rem;
+      border-radius: 12px;
+      color: white;
+      font-weight: 700;
       font-size: 0.95rem;
-      font-weight: 600;
-      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-      display: none;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.18);
       z-index: 2000;
-      animation: slideUp 0.2s ease-out;
+      display: none;
+      animation: pop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    .alert-success { background: #15803d; color: white; }
-    .alert-error { background: var(--danger); color: white; }
+    @keyframes pop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .toast-success { background: #059669; }
+    .toast-error { background: var(--danger); }
 
-    /* Auth Tab Buttons */
-    .auth-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1.5rem; background: #f1f5f9; padding: 0.3rem; border-radius: 8px; }
-    .auth-toggle button { border: none; padding: 0.55rem; background: transparent; font-weight: 600; font-size: 0.9rem; border-radius: 6px; cursor: pointer; color: var(--muted); }
-    .auth-toggle button.active { background: white; color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    /* Auth Switcher */
+    .auth-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; background: #f1f5f9; padding: 0.35rem; border-radius: 10px; margin-bottom: 1.8rem; }
+    .auth-tab-btn { border: none; padding: 0.6rem; background: transparent; font-weight: 700; border-radius: 8px; cursor: pointer; color: var(--text-muted); }
+    .auth-tab-btn.active { background: white; color: var(--text); box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
   </style>
 </head>
 <body>
 
+  <!-- Navigation -->
   <nav>
-    <div class="brand" onclick="navigate('page-tools')">🛠️ ToolShare</div>
+    <div class="brand" onclick="navigate('page-tools')">⚡ ToolShare</div>
     <ul class="nav-links">
-      <li><a id="nav-tools" class="active" onclick="navigate('page-tools')">Browse Catalog</a></li>
-      <li><a id="nav-add" onclick="navigate('page-add')">List a Tool</a></li>
-      <li><a id="nav-my-borrows" onclick="navigate('page-my-borrows')">My Borrows</a></li>
+      <li><a id="nav-tools" class="active" onclick="navigate('page-tools')">Explore Tools</a></li>
+      <li><a id="nav-add" onclick="navigate('page-add')">+ List a Tool</a></li>
+      <li><a id="nav-borrows" onclick="navigate('page-borrows')">My Borrowed Gear</a></li>
       <li><a id="nav-auth" onclick="navigate('page-auth')">Sign In</a></li>
-      <li><button id="nav-logout" class="btn-logout" style="display: none;" onclick="logout()">Sign Out</button></li>
+      <li><button id="nav-logout" class="btn-logout" style="display: none;" onclick="logout()">Log Out</button></li>
     </ul>
   </nav>
 
   <div class="container">
-    <div id="alertBox" class="alert-banner"></div>
+    <div id="toastBox" class="toast"></div>
 
-    <!-- 1. BROWSE CATALOG PAGE -->
+    <!-- 1. EXPLORE TOOLS PAGE (HOME) -->
     <section id="page-tools" class="page-view active">
-      <div class="hero-header">
-        <div>
-          <h2>Community Tool Library</h2>
-          <p>Borrow verified workshop and home repair tools from members near you.</p>
+      <div class="hero-banner">
+        <h1>Borrow Any Tool, Anytime.</h1>
+        <p>Save money and cut down on waste by accessing heavy-duty drills, gardening kits, and woodworking tools shared by your community.</p>
+        
+        <div class="search-wrapper">
+          <input type="text" id="searchInput" placeholder="Search drills, saws, lawnmowers..." oninput="handleSearch()" />
+          <select id="categoryFilter" onchange="handleSearch()">
+            <option value="all">All Categories</option>
+            <option value="Power Tools">Power Tools</option>
+            <option value="Gardening">Gardening</option>
+            <option value="Woodworking">Woodworking</option>
+            <option value="Hand Tools">Hand Tools</option>
+            <option value="Painting">Painting</option>
+          </select>
         </div>
       </div>
 
-      <div class="catalog-bar">
-        <input type="text" id="searchInput" class="search-input" placeholder="Search tools by keyword..." oninput="filterTools()" />
-        <select id="categoryFilter" class="filter-select" onchange="filterTools()">
-          <option value="all">All Categories</option>
-          <option value="Power Tools">Power Tools</option>
-          <option value="Gardening">Gardening</option>
-          <option value="Hand Tools">Hand Tools</option>
-          <option value="Painting">Painting</option>
-        </select>
-      </div>
-
-      <div id="toolCatalog" class="tool-grid"></div>
+      <div id="toolGrid" class="tool-grid"></div>
     </section>
 
-    <!-- 2. ADD TOOL PAGE -->
+    <!-- 2. LIST A TOOL PAGE -->
     <section id="page-add" class="page-view">
-      <div class="card" style="max-width: 550px; margin: 0 auto;">
-        <h2 style="margin-bottom: 0.4rem;">List an Equipment</h2>
-        <p style="color: var(--muted); font-size: 0.92rem; margin-bottom: 1.5rem;">Help neighbors reduce waste by sharing your spare tools.</p>
+      <div class="card" style="max-width: 580px; margin: 0 auto;">
+        <h2 style="font-size: 1.6rem; margin-bottom: 0.4rem;">List a Tool in the Library</h2>
+        <p style="color: var(--text-muted); margin-bottom: 1.8rem; font-size: 0.95rem;">Lend your gear to neighbors when you're not using it.</p>
         
         <form onsubmit="handleCreateTool(event)">
           <div class="form-group">
-            <label>Tool Title</label>
-            <input type="text" id="toolName" placeholder="e.g., Bosch 18V Cordless Jigsaw" required />
+            <label>Tool Title / Model</label>
+            <input type="text" id="newToolName" required placeholder="e.g., Bosch 18V Cordless Rotary Hammer" />
           </div>
           <div class="form-group">
             <label>Category</label>
-            <select id="toolCat">
+            <select id="newToolCat">
               <option value="Power Tools">Power Tools</option>
               <option value="Gardening">Gardening</option>
+              <option value="Woodworking">Woodworking</option>
               <option value="Hand Tools">Hand Tools</option>
               <option value="Painting">Painting</option>
             </select>
           </div>
           <div class="form-group">
             <label>Included Accessories & Condition</label>
-            <textarea id="toolDescription" rows="3" placeholder="Condition details, extra blades, carry bag..."></textarea>
+            <textarea id="newToolDesc" rows="3" placeholder="Includes 2 batteries, charger, and protective carrying case."></textarea>
           </div>
-          <button type="submit" class="btn-submit">Add Tool to Inventory</button>
+          <button type="submit" class="btn-submit">Publish Tool to Catalog</button>
         </form>
       </div>
     </section>
 
-    <!-- 3. MY BORROWS PAGE -->
-    <section id="page-my-borrows" class="page-view">
-      <div class="hero-header">
-        <div>
-          <h2>My Active Borrows</h2>
-          <p>Manage the equipment you currently have checked out.</p>
-        </div>
+    <!-- 3. MY BORROWED TOOLS PAGE -->
+    <section id="page-borrows" class="page-view">
+      <div class="card">
+        <h2 style="font-size: 1.6rem; margin-bottom: 0.4rem;">Your Active Borrows</h2>
+        <p style="color: var(--text-muted); margin-bottom: 1.8rem;">Tools you currently have checked out.</p>
+        <div id="myBorrowsGrid" class="tool-grid"></div>
       </div>
-      <div id="borrowedCatalog" class="tool-grid"></div>
     </section>
 
     <!-- 4. SIGN IN / REGISTER PAGE -->
     <section id="page-auth" class="page-view">
       <div class="card" style="max-width: 440px; margin: 0 auto;">
-        <div class="auth-toggle">
-          <button type="button" id="tabBtnLogin" class="active" onclick="toggleAuth('login')">Sign In</button>
-          <button type="button" id="tabBtnReg" onclick="toggleAuth('reg')">Create Account</button>
+        <div class="auth-tabs">
+          <button type="button" id="tabLogin" class="auth-tab-btn active" onclick="switchAuthTab('login')">Sign In</button>
+          <button type="button" id="tabReg" class="auth-tab-btn" onclick="switchAuthTab('reg')">Register</button>
         </div>
 
         <form id="formLogin" onsubmit="handleLogin(event)">
@@ -333,65 +364,67 @@
             <label>Password</label>
             <input type="password" id="regPassword" required placeholder="••••••••" />
           </div>
-          <button type="submit" class="btn-submit">Register</button>
+          <button type="submit" class="btn-submit">Create Account</button>
         </form>
       </div>
     </section>
   </div>
 
   <script>
-    // --- LOCAL DATABASE INIT ---
+    // --- DATABASE ENGINE (Indexed / LocalStorage) ---
     function initDatabase() {
       if (!localStorage.getItem('db_users')) localStorage.setItem('db_users', JSON.stringify([]));
       if (!localStorage.getItem('db_tools')) {
         const seedTools = [
-          { id: 101, name: 'DeWalt 20V Cordless Drill', cat: 'Power Tools', desc: 'Brushless drill kit with 2 lithium batteries and hard case.', status: 'available', owner: 'Alex M.', borrower: null },
-          { id: 102, name: 'Telescopic Garden Lopper', cat: 'Gardening', desc: 'Compound action tree branch trimmer with 3m reach.', status: 'available', owner: 'Library Admin', borrower: null },
-          { id: 103, name: '7-Inch Wet Tile Saw', cat: 'Power Tools', desc: 'Includes continuous rim diamond blade and water reservoir.', status: 'available', owner: 'Library Admin', borrower: null },
-          { id: 104, name: 'Laser Cross-Line Level', cat: 'Hand Tools', desc: 'Self-leveling 360-degree vertical and horizontal green beam.', status: 'available', owner: 'David K.', borrower: null }
+          { id: 101, name: 'DeWalt 20V Max Brushless Drill', cat: 'Power Tools', desc: 'Cordless compact drill driver kit with 2.0Ah lithium battery.', status: 'available', owner: 'Siddhant P.', borrower: null },
+          { id: 102, name: 'Husqvarna 16-Inch Gas Chainsaw', cat: 'Woodworking', desc: 'X-Torq 2-cycle engine for limb cutting and firewood pruning.', status: 'available', owner: 'Community Shed', borrower: null },
+          { id: 103, name: 'Fiskars Telescopic Tree Lopper', cat: 'Gardening', desc: 'Prunes branches up to 14 feet away with chain-drive pulley.', status: 'available', owner: 'Community Shed', borrower: null },
+          { id: 104, name: 'Wagner Paint Crew Sprayer', cat: 'Painting', desc: 'High pressure airless sprayer with 25ft hose for interior/exterior.', status: 'available', owner: 'Mark R.', borrower: null },
+          { id: 105, name: 'Bosch Professional Rotary Laser', cat: 'Hand Tools', desc: 'Self-leveling 360-degree beam with magnetic bracket & tripod.', status: 'available', owner: 'Elena V.', borrower: null },
+          { id: 106, name: 'Makita Random Orbit Sander', cat: 'Woodworking', desc: '5-inch 3.0 AMP variable speed sander with dust collector.', status: 'available', owner: 'Community Shed', borrower: null }
         ];
         localStorage.setItem('db_tools', JSON.stringify(seedTools));
       }
     }
     initDatabase();
 
-    // --- NAVIGATION ENGINE ---
-    function navigate(pageId) {
+    // --- NAVIGATION ROUTER ---
+    function navigate(viewId) {
       document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
 
-      const target = document.getElementById(pageId);
+      const target = document.getElementById(viewId);
       if (target) target.classList.add('active');
 
-      const mapping = {
+      const map = {
         'page-tools': 'nav-tools',
         'page-add': 'nav-add',
-        'page-my-borrows': 'nav-my-borrows',
+        'page-borrows': 'nav-borrows',
         'page-auth': 'nav-auth'
       };
-      if (mapping[pageId]) document.getElementById(mapping[pageId]).classList.add('active');
+      if (map[viewId]) document.getElementById(map[viewId]).classList.add('active');
 
       renderAll();
     }
 
-    // --- NOTIFICATION ALERT ---
-    function notify(msg, type = 'success') {
-      const box = document.getElementById('alertBox');
-      box.textContent = msg;
-      box.className = `alert-banner alert-${type}`;
-      box.style.display = 'block';
-      setTimeout(() => { box.style.display = 'none'; }, 3200);
+    // --- NOTIFICATION TOAST ---
+    function toast(msg, type = 'success') {
+      const t = document.getElementById('toastBox');
+      t.textContent = msg;
+      t.className = `toast toast-${type}`;
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 3200);
     }
 
     // --- AUTHENTICATION ---
-    function toggleAuth(type) {
+    function switchAuthTab(type) {
       document.getElementById('formLogin').style.display = type === 'login' ? 'block' : 'none';
       document.getElementById('formRegister').style.display = type === 'reg' ? 'block' : 'none';
-      document.getElementById('tabBtnLogin').className = type === 'login' ? 'active' : '';
-      document.getElementById('tabBtnReg').className = type === 'reg' ? 'active' : '';
+      document.getElementById('tabLogin').className = type === 'login' ? 'auth-tab-btn active' : 'auth-tab-btn';
+      document.getElementById('tabReg').className = type === 'reg' ? 'auth-tab-btn active' : 'auth-tab-btn';
     }
 
-    function checkAuth() {
+    function checkAuthState() {
       const session = JSON.parse(localStorage.getItem('session_user') || 'null');
       const authLink = document.getElementById('nav-auth');
       const logoutBtn = document.getElementById('nav-logout');
@@ -412,16 +445,14 @@
       const password = document.getElementById('regPassword').value;
 
       const users = JSON.parse(localStorage.getItem('db_users'));
-      if (users.find(u => u.email === email)) {
-        return notify('Email is already registered!', 'error');
-      }
+      if (users.find(u => u.email === email)) return toast('Email is already registered!', 'error');
 
       users.push({ id: Date.now(), name, email, password });
       localStorage.setItem('db_users', JSON.stringify(users));
       localStorage.setItem('session_user', JSON.stringify({ name, email }));
 
-      notify('Account registered successfully!');
-      checkAuth();
+      toast('Welcome! Account created successfully.');
+      checkAuthState();
       navigate('page-tools');
     }
 
@@ -433,18 +464,18 @@
       const users = JSON.parse(localStorage.getItem('db_users'));
       const user = users.find(u => u.email === email && u.password === password);
 
-      if (!user) return notify('Invalid email address or password', 'error');
+      if (!user) return toast('Invalid email or password.', 'error');
 
       localStorage.setItem('session_user', JSON.stringify({ name: user.name, email: user.email }));
-      notify(`Welcome back, ${user.name}!`);
-      checkAuth();
+      toast(`Signed in as ${user.name}`);
+      checkAuthState();
       navigate('page-tools');
     }
 
     function logout() {
       localStorage.removeItem('session_user');
-      checkAuth();
-      notify('Signed out.');
+      checkAuthState();
+      toast('Logged out.');
       navigate('page-tools');
     }
 
@@ -453,16 +484,21 @@
       e.preventDefault();
       const session = JSON.parse(localStorage.getItem('session_user') || 'null');
       if (!session) {
-        notify('Sign in to list items in the library.', 'error');
+        toast('Please sign in to list tools.', 'error');
         return navigate('page-auth');
       }
 
+      const name = document.getElementById('newToolName').value.trim();
+      const cat = document.getElementById('newToolCat').value;
+      const desc = document.getElementById('newToolDesc').value.trim();
+
       const tools = JSON.parse(localStorage.getItem('db_tools'));
+      // Add newly listed tool right at the top
       tools.unshift({
         id: Date.now(),
-        name: document.getElementById('toolName').value,
-        cat: document.getElementById('toolCat').value,
-        desc: document.getElementById('toolDescription').value,
+        name,
+        cat,
+        desc: desc || 'Available for community loan.',
         status: 'available',
         owner: session.name,
         borrower: null
@@ -470,119 +506,141 @@
 
       localStorage.setItem('db_tools', JSON.stringify(tools));
       e.target.reset();
-      notify('Tool published to catalog!');
+      toast('Tool added directly to catalog!');
       navigate('page-tools');
     }
 
-    function toggleBorrow(toolId) {
+    function toggleBorrow(id) {
       const session = JSON.parse(localStorage.getItem('session_user') || 'null');
       if (!session) {
-        notify('Please sign in to borrow or return tools.', 'error');
+        toast('Please sign in to borrow or return tools.', 'error');
         return navigate('page-auth');
       }
 
       const tools = JSON.parse(localStorage.getItem('db_tools'));
-      const item = tools.find(t => t.id === toolId);
+      const tool = tools.find(t => t.id === id);
 
-      if (item) {
-        if (item.status === 'available') {
-          item.status = 'borrowed';
-          item.borrower = session.email;
-          notify(`You checked out: ${item.name}`);
-        } else if (item.borrower === session.email) {
-          item.status = 'available';
-          item.borrower = null;
-          notify(`Returned: ${item.name}`);
+      if (tool) {
+        if (tool.status === 'available') {
+          tool.status = 'borrowed';
+          tool.borrower = session.email;
+          toast(`Checked out: ${tool.name}`);
+        } else if (tool.borrower === session.email) {
+          tool.status = 'available';
+          tool.borrower = null;
+          toast(`Returned: ${tool.name}`);
         }
         localStorage.setItem('db_tools', JSON.stringify(tools));
         renderAll();
       }
     }
 
-    // --- RENDER & FILTER ---
-    function filterTools() {
+    // --- SEARCH WITH SMART RANDOM FALLBACKS ---
+    function handleSearch() {
       renderCatalog();
     }
 
     function renderCatalog() {
       const tools = JSON.parse(localStorage.getItem('db_tools') || '[]');
       const session = JSON.parse(localStorage.getItem('session_user') || 'null');
-      const query = document.getElementById('searchInput').value.toLowerCase();
-      const selectedCategory = document.getElementById('categoryFilter').value;
+      const query = document.getElementById('searchInput').value.trim().toLowerCase();
+      const category = document.getElementById('categoryFilter').value;
+      const grid = document.getElementById('toolGrid');
 
-      const filtered = tools.filter(t => {
+      // Primary filter
+      let matches = tools.filter(t => {
         const matchesQuery = t.name.toLowerCase().includes(query) || (t.desc && t.desc.toLowerCase().includes(query));
-        const matchesCat = selectedCategory === 'all' || t.cat === selectedCategory;
+        const matchesCat = category === 'all' || t.cat === category;
         return matchesQuery && matchesCat;
       });
 
-      const catalog = document.getElementById('toolCatalog');
-      if (filtered.length === 0) {
-        catalog.innerHTML = '<p style="color: var(--muted); grid-column: 1/-1;">No matching tools found in the catalog.</p>';
-        return;
+      let showFallbackNote = false;
+
+      // If search yielded no results, select random suggested tools so it's never empty
+      if (matches.length === 0 && tools.length > 0) {
+        showFallbackNote = true;
+        // Shuffle and pick 3 suggestions
+        const shuffled = [...tools].sort(() => 0.5 - Math.random());
+        matches = shuffled.slice(0, 3);
       }
 
-      catalog.innerHTML = filtered.map(t => {
-        const isBorrowed = t.status === 'borrowed';
-        const isMine = session && t.borrower === session.email;
+      let html = '';
+      if (showFallbackNote) {
+        html += `
+          <div class="fallback-banner">
+            🔍 No direct match for "<b>${query}</b>". Here are some popular tools you might like instead:
+          </div>
+        `;
+      }
 
-        let actionBtn = '';
+      html += matches.map(t => {
+        const isBorrowed = t.status === 'borrowed';
+        const isMyBorrow = session && t.borrower === session.email;
+
+        let btn = '';
         if (!isBorrowed) {
-          actionBtn = `<button class="btn-action btn-borrow" onclick="toggleBorrow(${t.id})">Borrow Tool</button>`;
-        } else if (isMine) {
-          actionBtn = `<button class="btn-action btn-return" onclick="toggleBorrow(${t.id})">Return to Library</button>`;
+          btn = `<button class="btn-action btn-borrow" onclick="toggleBorrow(${t.id})">Borrow This Tool</button>`;
+        } else if (isMyBorrow) {
+          btn = `<button class="btn-action btn-return" onclick="toggleBorrow(${t.id})">Return Tool</button>`;
         } else {
-          actionBtn = `<button class="btn-action btn-disabled" disabled>Currently Borrowed</button>`;
+          btn = `<button class="btn-action btn-disabled" disabled>Currently In Use</button>`;
         }
 
         return `
           <div class="tool-card">
             <div>
-              <div class="card-top">
-                <span class="badge badge-category">${t.cat}</span>
-                <span class="badge badge-status ${isBorrowed ? 'borrowed' : ''}">${isBorrowed ? 'Borrowed' : 'Available'}</span>
+              <div class="tool-header">
+                <span class="tag tag-cat">${t.cat}</span>
+                <span class="tag tag-status ${isBorrowed ? 'borrowed' : ''}">${isBorrowed ? 'Borrowed' : 'Available'}</span>
               </div>
               <div class="tool-title">${t.name}</div>
-              <div class="tool-desc">${t.desc || 'No specific notes provided.'}</div>
+              <div class="tool-desc">${t.desc}</div>
             </div>
-            <div>
-              <div class="tool-meta">Shared by <b>${t.owner}</b></div>
-              ${actionBtn}
+            <div class="tool-footer">
+              <div class="owner-info">
+                <span>Owner: <b>${t.owner}</b></span>
+                <span>ID: #${t.id.toString().slice(-4)}</span>
+              </div>
+              ${btn}
             </div>
           </div>
         `;
       }).join('');
+
+      grid.innerHTML = html;
     }
 
     function renderMyBorrows() {
       const tools = JSON.parse(localStorage.getItem('db_tools') || '[]');
       const session = JSON.parse(localStorage.getItem('session_user') || 'null');
-      const target = document.getElementById('borrowedCatalog');
+      const target = document.getElementById('myBorrowsGrid');
 
       if (!session) {
-        target.innerHTML = '<p style="color: var(--muted); grid-column: 1/-1;">Please sign in to inspect your borrowed items.</p>';
+        target.innerHTML = '<p style="color: var(--text-muted); grid-column: 1/-1;">Sign in to view your checked-out tools.</p>';
         return;
       }
 
       const activeBorrows = tools.filter(t => t.borrower === session.email);
       if (activeBorrows.length === 0) {
-        target.innerHTML = '<p style="color: var(--muted); grid-column: 1/-1;">You do not currently have any equipment checked out.</p>';
+        target.innerHTML = '<p style="color: var(--text-muted); grid-column: 1/-1;">You have no tools currently checked out.</p>';
         return;
       }
 
       target.innerHTML = activeBorrows.map(t => `
         <div class="tool-card">
           <div>
-            <div class="card-top">
-              <span class="badge badge-category">${t.cat}</span>
-              <span class="badge badge-status borrowed">Checked Out</span>
+            <div class="tool-header">
+              <span class="tag tag-cat">${t.cat}</span>
+              <span class="tag tag-status borrowed">Checked Out</span>
             </div>
             <div class="tool-title">${t.name}</div>
-            <div class="tool-desc">${t.desc || ''}</div>
+            <div class="tool-desc">${t.desc}</div>
           </div>
-          <div>
-            <div class="tool-meta">Owner: <b>${t.owner}</b></div>
-            <button class="btn-action btn-return" onclick="toggleBorrow(${t.id})">Return Equipment</button>
+          <div class="tool-footer">
+            <div class="owner-info">
+              <span>Owner: <b>${t.owner}</b></span>
+            </div>
+            <button class="btn-action btn-return" onclick="toggleBorrow(${t.id})">Return to Library</button>
           </div>
         </div>
       `).join('');
@@ -593,7 +651,7 @@
       renderMyBorrows();
     }
 
-    checkAuth();
+    checkAuthState();
     renderAll();
   </script>
 </body>

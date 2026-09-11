@@ -43,9 +43,6 @@
     const IconSearch = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>;
     const IconRotate = () => <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>;
     const IconClose = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/></svg>;
-    const IconUser = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>;
-    const IconShield = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>;
-    const IconLogOut = () => <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>;
 
     // --- Seed Demo Users ---
     const DEMO_USERS = [
@@ -54,32 +51,103 @@
       { id: 'u-3', name: 'Sneha Roy', rollNo: 'CS-2026-044', email: 'sneha@campus.edu', role: 'Club Lead', dept: 'Robotics & Automation Society', semester: 'Semester 6' }
     ];
 
-    // --- Seed Tools Database ---
+    // --- Expanded 16 Demo Tools (4 in each Category) ---
     const SEED_TOOLS = [
+      // POWER TOOLS
       {
         id: 't-101',
-        name: 'Bosch Professional 18V Cordless Drill',
+        name: 'Bosch Professional 18V Cordless Drill Kit',
         category: 'Power Tools',
         deposit: 750,
         condition: 'Excellent',
         owner: 'Mechanical Lab A (Prof. Sharma)',
         status: 'Available',
         image: 'https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=600&q=80',
-        description: 'Includes dual 2.0Ah Li-ion batteries, rapid charger, and 30-piece titanium bit set.'
+        description: 'Includes dual 2.0Ah Li-ion batteries, fast-charger, and 30-piece high-speed titanium bit set.'
       },
       {
         id: 't-102',
+        name: 'DeWalt 20V Max Brushless Circular Saw',
+        category: 'Power Tools',
+        deposit: 900,
+        condition: 'Like New',
+        owner: 'Civil Carpentry Workshop',
+        status: 'Available',
+        image: 'https://images.unsplash.com/photo-1572981779307-38b8cabb2407?auto=format&fit=crop&w=600&q=80',
+        description: '7-1/4 inch carbide blade, electronic brake, bevel capacity of up to 57 degrees for framing.'
+      },
+      {
+        id: 't-103',
+        name: 'Makita 850W Heavy Duty Angle Grinder',
+        category: 'Power Tools',
+        deposit: 500,
+        condition: 'Good',
+        owner: 'Motorsports Club Garage',
+        status: 'Borrowed',
+        image: 'https://images.unsplash.com/photo-1581783342308-f792dbdd27c5?auto=format&fit=crop&w=600&q=80',
+        description: 'Includes 5 metal cutting discs, spanner wrench, vibration-proof side handle, and face shield.'
+      },
+      {
+        id: 't-104',
+        name: 'Dremel 4000 High-Speed Rotary Kit',
+        category: 'Power Tools',
+        deposit: 450,
+        condition: 'Like New',
+        owner: 'FabLab Prototyping Center',
+        status: 'Available',
+        image: 'https://images.unsplash.com/photo-1530124566582-a618bc2615dc?auto=format&fit=crop&w=600&q=80',
+        description: 'Variable speed from 5,000 to 35,000 RPM. Perfect for PCB cutting, sanding, and micro-polishing.'
+      },
+
+      // HAND TOOLS
+      {
+        id: 't-201',
         name: '46-Piece Precision Ratchet Socket Set',
         category: 'Hand Tools',
         deposit: 400,
         condition: 'Good',
         owner: 'Robotics Club (Sneha R.)',
         status: 'Available',
-        image: 'https://images.unsplash.com/photo-1581783342308-f792dbdd27c5?auto=format&fit=crop&w=600&q=80',
-        description: '1/4 inch drive chrome vanadium steel set for chassis, engines, and frame mounts.'
+        image: 'https://images.unsplash.com/photo-1616401784845-180882ba9ba8?auto=format&fit=crop&w=600&q=80',
+        description: '1/4 inch drive chrome vanadium steel set with extension bars. Ideal for robot chassis.'
       },
       {
-        id: 't-103',
+        id: 't-202',
+        name: 'Stanley FatMax 6-Piece Wood Chisel Kit',
+        category: 'Hand Tools',
+        deposit: 300,
+        condition: 'Good',
+        owner: 'Woodworking & Model Shop',
+        status: 'Available',
+        image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=80',
+        description: 'Hardened high-carbon chrome steel blades (6mm to 32mm) with steel strike caps.'
+      },
+      {
+        id: 't-203',
+        name: 'Irwin Vise-Grip 3-Piece Locking Pliers',
+        category: 'Hand Tools',
+        deposit: 250,
+        condition: 'Fair / Functional',
+        owner: 'Mechanical Central Workshop',
+        status: 'Available',
+        image: 'https://images.unsplash.com/photo-1586864387967-d02ef85d93e8?auto=format&fit=crop&w=600&q=80',
+        description: 'Includes 10R straight jaw, 7R curved jaw, and 6LN long nose locking clamp pliers.'
+      },
+      {
+        id: 't-204',
+        name: 'Bahco 12-Inch Ergonomic Adjustable Wrench',
+        category: 'Hand Tools',
+        deposit: 200,
+        condition: 'Like New',
+        owner: 'Plumbing & Hydraulic Lab',
+        status: 'Borrowed',
+        image: 'https://images.unsplash.com/photo-1580910051074-3eb694886505?auto=format&fit=crop&w=600&q=80',
+        description: 'Wide jaw opening with measurement scale in mm. Non-slip thermostatic rubber grip.'
+      },
+
+      // GARDENING
+      {
+        id: 't-301',
         name: 'Electric Hedge Trimmer 550W',
         category: 'Gardening',
         deposit: 600,
@@ -87,10 +155,45 @@
         owner: 'Campus Estate Maintenance',
         status: 'Borrowed',
         image: 'https://images.unsplash.com/photo-1592417817098-8f3d6ef231f8?auto=format&fit=crop&w=600&q=80',
-        description: 'Dual-action 450mm blades with safety two-hand power trigger.'
+        description: 'Dual-action 450mm blades with safety two-hand power trigger and protective sleeve.'
       },
       {
-        id: 't-104',
+        id: 't-302',
+        name: 'Kärcher High-Pressure Garden Washer 1400W',
+        category: 'Gardening',
+        deposit: 850,
+        condition: 'Excellent',
+        owner: 'Hostel Facilities Desk',
+        status: 'Available',
+        image: 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=600&q=80',
+        description: '110-bar max pressure with dirt blaster lance and detergent suction hose for deep cleaning.'
+      },
+      {
+        id: 't-303',
+        name: 'Fiskars Heavy-Duty Bypass Lopper & Pruner',
+        category: 'Gardening',
+        deposit: 250,
+        condition: 'Good',
+        owner: 'Campus Botany Society',
+        status: 'Available',
+        image: 'https://images.unsplash.com/photo-1599685315640-9ceab2f58944?auto=format&fit=crop&w=600&q=80',
+        description: 'PowerGear gear mechanism multiplies leverage. Cuts branches up to 2 inches clean.'
+      },
+      {
+        id: 't-304',
+        name: 'Stihl Cordless Line Grass Trimmer',
+        category: 'Gardening',
+        deposit: 700,
+        condition: 'Good',
+        owner: 'Sports Ground Operations',
+        status: 'Available',
+        image: 'https://images.unsplash.com/photo-1617576683096-00fc8eecb3af?auto=format&fit=crop&w=600&q=80',
+        description: 'Battery-operated quiet string trimmer for turf boundaries and tight curbs. Includes spool.'
+      },
+
+      // MEASUREMENT
+      {
+        id: 't-401',
         name: 'Digital Laser Rangefinder 40M',
         category: 'Measurement',
         deposit: 300,
@@ -99,21 +202,57 @@
         status: 'Available',
         image: 'https://images.unsplash.com/photo-1572981779307-38b8cabb2407?auto=format&fit=crop&w=600&q=80',
         description: 'High precision millimeter measurement with auto area and volume calculator.'
+      },
+      {
+        id: 't-402',
+        name: 'Mitutoyo 6-Inch Digital Vernier Caliper',
+        category: 'Measurement',
+        deposit: 500,
+        condition: 'Brand New',
+        owner: 'Precision Metrology Lab',
+        status: 'Available',
+        image: 'https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=600&q=80',
+        description: 'Resolution 0.01mm (0.0005 in). Carbide-tipped jaws with digital LCD display and hard case.'
+      },
+      {
+        id: 't-403',
+        name: 'Fluke 115 True-RMS Digital Multimeter',
+        category: 'Measurement',
+        deposit: 800,
+        condition: 'Excellent',
+        owner: 'Electronics Circuit Design Lab',
+        status: 'Borrowed',
+        image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80',
+        description: 'Accurate True-RMS measurement for AC/DC voltage, resistance, continuity, and frequency.'
+      },
+      {
+        id: 't-404',
+        name: 'Bosch 360° Cross-Line Self-Leveling Laser',
+        category: 'Measurement',
+        deposit: 650,
+        condition: 'Like New',
+        owner: 'Architecture Studio A',
+        status: 'Available',
+        image: 'https://images.unsplash.com/photo-1508873696983-2df5293cb32f?auto=format&fit=crop&w=600&q=80',
+        description: 'Projects green 360-degree horizontal line and vertical reference lines. Includes mini tripod.'
       }
     ];
 
-    // --- Local DB Engine ---
+    // --- Local DB Engine (v3 storage key) ---
+    const DB_KEY = 'toolshare_db_tools_v3';
+    const BORROWS_KEY = 'toolshare_db_borrows_v3';
+
     const localDb = {
       getTools: () => {
-        const raw = localStorage.getItem('toolshare_db_tools');
+        const raw = localStorage.getItem(DB_KEY);
         if (!raw) {
-          localStorage.setItem('toolshare_db_tools', JSON.stringify(SEED_TOOLS));
+          localStorage.setItem(DB_KEY, JSON.stringify(SEED_TOOLS));
           return SEED_TOOLS;
         }
         return JSON.parse(raw);
       },
       getBorrows: () => {
-        const raw = localStorage.getItem('toolshare_db_borrows');
+        const raw = localStorage.getItem(BORROWS_KEY);
         return raw ? JSON.parse(raw) : [];
       },
       getCurrentUser: () => {
@@ -129,7 +268,7 @@
         if (!tool) return null;
 
         tool.status = 'Borrowed';
-        localStorage.setItem('toolshare_db_tools', JSON.stringify(tools));
+        localStorage.setItem(DB_KEY, JSON.stringify(tools));
 
         const dueDate = new Date();
         dueDate.setDate(dueDate.getDate() + parseInt(borrowDetails.days || 3));
@@ -153,7 +292,7 @@
         };
 
         const borrows = [newBorrow, ...localDb.getBorrows()];
-        localStorage.setItem('toolshare_db_borrows', JSON.stringify(borrows));
+        localStorage.setItem(BORROWS_KEY, JSON.stringify(borrows));
         return { tools, borrows };
       },
       returnTool: (borrowId) => {
@@ -163,29 +302,29 @@
 
         borrow.status = 'Returned';
         borrow.returnedDate = new Date().toLocaleDateString();
-        localStorage.setItem('toolshare_db_borrows', JSON.stringify(borrows));
+        localStorage.setItem(BORROWS_KEY, JSON.stringify(borrows));
 
         const tools = localDb.getTools();
         const tool = tools.find(t => t.id === borrow.toolId);
         if (tool) {
           tool.status = 'Available';
-          localStorage.setItem('toolshare_db_tools', JSON.stringify(tools));
+          localStorage.setItem(DB_KEY, JSON.stringify(tools));
         }
         return { tools, borrows };
       },
       saveTool: (tool) => {
         const tools = [{ ...tool, id: 't-' + Date.now(), status: 'Available' }, ...localDb.getTools()];
-        localStorage.setItem('toolshare_db_tools', JSON.stringify(tools));
+        localStorage.setItem(DB_KEY, JSON.stringify(tools));
         return tools;
       },
       deleteTool: (id) => {
         const tools = localDb.getTools().filter(t => t.id !== id);
-        localStorage.setItem('toolshare_db_tools', JSON.stringify(tools));
+        localStorage.setItem(DB_KEY, JSON.stringify(tools));
         return tools;
       },
       reset: () => {
-        localStorage.setItem('toolshare_db_tools', JSON.stringify(SEED_TOOLS));
-        localStorage.removeItem('toolshare_db_borrows');
+        localStorage.setItem(DB_KEY, JSON.stringify(SEED_TOOLS));
+        localStorage.removeItem(BORROWS_KEY);
         localStorage.setItem('toolshare_db_user', JSON.stringify(DEMO_USERS[0]));
         return { tools: SEED_TOOLS, borrows: [], user: DEMO_USERS[0] };
       }
@@ -195,7 +334,6 @@
       const [tab, setTab] = useState('catalog');
       const [currentUser, setCurrentUser] = useState(null);
       const [showAuthModal, setShowAuthModal] = useState(false);
-      const [authMode, setAuthMode] = useState('login'); // 'login' | 'signup'
 
       const [tools, setTools] = useState([]);
       const [borrows, setBorrows] = useState([]);
@@ -203,16 +341,13 @@
       const [categoryFilter, setCategoryFilter] = useState('All');
       const [selectedTool, setSelectedTool] = useState(null);
 
-      // Auth form state
       const [authForm, setAuthForm] = useState({
         name: '',
-        email: '',
         rollNo: '',
         dept: 'Mechanical Engineering',
         role: 'Student Borrower'
       });
 
-      // Rich Checkout & Borrow Options State
       const [borrowForm, setBorrowForm] = useState({
         borrowerName: '',
         rollNo: '',
@@ -224,7 +359,6 @@
         safetyAccepted: true
       });
 
-      // Post tool state
       const [newTool, setNewTool] = useState({
         name: '',
         category: 'Power Tools',
@@ -243,7 +377,6 @@
         setBorrows(localDb.getBorrows());
       }, []);
 
-      // Auto-populate borrow form with current authenticated user
       useEffect(() => {
         if (currentUser) {
           setBorrowForm(prev => ({
@@ -266,7 +399,7 @@
         const file = e.target.files[0];
         if (file) {
           if (file.size > 2 * 1024 * 1024) {
-            alert('File exceeds 2MB limit. Please upload a smaller photo.');
+            alert('File exceeds 2MB limit. Please choose a smaller photo.');
             return;
           }
           const reader = new FileReader();
@@ -326,7 +459,7 @@
         const userObj = {
           id: 'u-' + Date.now(),
           name: authForm.name || 'Campus Student',
-          email: authForm.email || 'student@campus.edu',
+          email: 'student@campus.edu',
           rollNo: authForm.rollNo || 'SE-2026-X',
           dept: authForm.dept,
           role: authForm.role,
@@ -361,7 +494,7 @@
                   <div className="flex items-center gap-2">
                     <span className="font-extrabold tracking-tight text-lg text-white">ToolShare</span>
                     <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                      v3.0 Portal
+                      16 Tools Demo
                     </span>
                   </div>
                   <p className="text-[10px] text-slate-400">Campus Asset Lending & Auth System</p>
@@ -427,9 +560,9 @@
                 </button>
               </nav>
 
-              {/* User Login / Profile Badge */}
+              {/* User Switcher */}
               <div className="flex items-center gap-2">
-                {currentUser ? (
+                {currentUser && (
                   <button
                     onClick={() => setShowAuthModal(true)}
                     className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700/80 border border-slate-700 transition"
@@ -442,18 +575,11 @@
                       <div className="text-[9px] text-amber-400 font-mono">{currentUser.rollNo}</div>
                     </div>
                   </button>
-                ) : (
-                  <button
-                    onClick={() => setShowAuthModal(true)}
-                    className="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold transition shadow"
-                  >
-                    Login / ID
-                  </button>
                 )}
 
                 <button
                   onClick={() => {
-                    if (confirm('Reset to standard initial seed data?')) {
+                    if (confirm('Re-seed catalog back to all 16 items?')) {
                       const r = localDb.reset();
                       setTools(r.tools);
                       setBorrows(r.borrows);
@@ -468,7 +594,7 @@
             </div>
           </header>
 
-          {/* Subheader: Active User Context Strip */}
+          {/* Subheader: Active User Context */}
           <div className="bg-slate-950 text-slate-400 text-xs px-4 py-2 border-b border-slate-800">
             <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
               <div className="flex items-center gap-2">
@@ -477,30 +603,30 @@
                 <span className="text-slate-600">•</span>
                 <span className="hidden sm:inline">{currentUser?.dept}</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div>
                 <button
                   onClick={() => setShowAuthModal(true)}
                   className="text-amber-400 hover:underline text-[11px]"
                 >
-                  Switch Role / Re-authenticate
+                  Switch Demo Profile / Log in
                 </button>
               </div>
             </div>
           </div>
 
-          {/* View Container */}
+          {/* Main Content Area */}
           <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full">
 
             {/* TAB 1: CATALOG */}
             {tab === 'catalog' && (
               <div className="space-y-6">
-                {/* Search & Filter Bar */}
+                {/* Search & Category Filter Toolbar */}
                 <div className="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col lg:flex-row gap-3 items-center justify-between">
                   <div className="relative w-full lg:w-96">
                     <span className="absolute left-3.5 top-3 text-slate-400"><IconSearch /></span>
                     <input
                       type="text"
-                      placeholder="Search drills, wrenches, survey kits, or lab custodian..."
+                      placeholder="Search across 16 tools, calipers, saws, drills, multimeters..."
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                       className="w-full pl-10 pr-4 py-2 bg-slate-50 hover:bg-slate-100/70 focus:bg-white rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 focus:outline-none transition"
@@ -578,7 +704,7 @@
               </div>
             )}
 
-            {/* TAB 2: ACTIVE BORROWS & RETURN AUDIT */}
+            {/* TAB 2: ACTIVE LOANS & RETURN AUDIT */}
             {tab === 'borrows' && (
               <div className="space-y-6">
                 <div>
@@ -604,14 +730,13 @@
 
                             <h4 className="font-bold text-slate-900 mt-2 text-base">{item.toolName}</h4>
                             
-                            {/* Rich Borrow Metadata Card */}
                             <div className="mt-3 p-3 bg-slate-50 rounded-xl space-y-1 text-xs border border-slate-100">
                               <p>Custodian: <strong className="text-slate-800">{item.borrower}</strong> ({item.rollNo || 'N/A'})</p>
                               <p>Department: <span className="text-slate-600">{item.dept}</span></p>
                               <p>Purpose: <span className="text-slate-600">{item.purpose || 'Project Testing'}</span></p>
                               <p>Pickup Desk: <span className="text-slate-600">{item.pickupPoint}</span></p>
-                              <p>Collection Window: <span className="text-slate-600">{item.timeSlot}</span></p>
-                              <p>Secured Deposit: <strong className="text-slate-900 font-mono">₹{item.cautionDeposit}</strong></p>
+                              <p>Collection Slot: <span className="text-slate-600">{item.timeSlot}</span></p>
+                              <p>Deposit Secured: <strong className="text-slate-900 font-mono">₹{item.cautionDeposit}</strong></p>
                             </div>
                           </div>
 
@@ -661,7 +786,7 @@
                   <div className="bg-slate-900 text-white p-5 rounded-2xl border border-slate-800 shadow">
                     <span className="text-[10px] font-bold text-amber-400 uppercase tracking-widest">Total Inventory</span>
                     <h4 className="text-3xl font-extrabold mt-1">{tools.length}</h4>
-                    <p className="text-xs text-slate-400 mt-1">Catalogued gear</p>
+                    <p className="text-xs text-slate-400 mt-1">16 pre-seeded assets</p>
                   </div>
 
                   <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
@@ -773,7 +898,7 @@
               </div>
             )}
 
-            {/* TAB 5: POST A TOOL (WITH LOCAL FILE UPLOAD) */}
+            {/* TAB 5: POST A TOOL */}
             {tab === 'list' && (
               <div className="max-w-2xl mx-auto bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xl">
                 <div className="flex items-center gap-3 mb-6 pb-5 border-b border-slate-100">
@@ -852,7 +977,6 @@
                     </div>
                   </div>
 
-                  {/* Image Upload Component */}
                   <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
                     <div className="flex justify-between items-center">
                       <label className="block font-bold text-slate-800">Tool Image</label>
@@ -927,7 +1051,7 @@
             )}
           </main>
 
-          {/* ADVANCED CHECKOUT & BORROW MODAL WITH EXTENDED OPTIONS */}
+          {/* CHECKOUT MODAL */}
           {selectedTool && (
             <div className="fixed inset-0 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
               <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 relative my-8">
@@ -944,10 +1068,9 @@
 
                 <form onSubmit={handleConfirmBorrow} className="mt-5 space-y-4 text-xs">
                   
-                  {/* User credentials */}
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block font-semibold text-slate-700 mb-1">Student / Borrower Name *</label>
+                      <label className="block font-semibold text-slate-700 mb-1">Borrower Name *</label>
                       <input
                         type="text"
                         required
@@ -957,7 +1080,7 @@
                       />
                     </div>
                     <div>
-                      <label className="block font-semibold text-slate-700 mb-1">Student Roll No / Staff ID *</label>
+                      <label className="block font-semibold text-slate-700 mb-1">Student Roll No / ID *</label>
                       <input
                         type="text"
                         required
@@ -968,7 +1091,6 @@
                     </div>
                   </div>
 
-                  {/* Project Purpose */}
                   <div>
                     <label className="block font-semibold text-slate-700 mb-1">Purpose of Loan *</label>
                     <select
@@ -984,7 +1106,6 @@
                     </select>
                   </div>
 
-                  {/* Pickup Point & Time Window */}
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="block font-semibold text-slate-700 mb-1">Pickup Counter *</label>
@@ -1014,7 +1135,6 @@
                     </div>
                   </div>
 
-                  {/* Loan Duration */}
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="block font-semibold text-slate-700 mb-1">Duration (Days)</label>
@@ -1035,7 +1155,6 @@
                     </div>
                   </div>
 
-                  {/* Safety & Compliance Checkbox */}
                   <label className="flex items-start gap-2 pt-1 cursor-pointer">
                     <input
                       type="checkbox"
@@ -1069,7 +1188,7 @@
             </div>
           )}
 
-          {/* AUTH & PROFILE SWITCHER MODAL */}
+          {/* AUTH MODAL */}
           {showAuthModal && (
             <div className="fixed inset-0 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
               <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 relative">
@@ -1083,7 +1202,6 @@
                 <h3 className="font-extrabold text-slate-900 text-lg">Identity & Access Control</h3>
                 <p className="text-xs text-slate-500 mb-4">Switch mock student personas or sign in with university credentials</p>
 
-                {/* 1-Click Quick Personas for Evaluation */}
                 <div className="space-y-2 mb-6">
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">1-Click Quick Demo Profiles</span>
                   {DEMO_USERS.map(user => (

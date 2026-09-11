@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ToolShare — Campus Asset Lending Network</title>
+  <title>ToolShare — Campus Asset Lending & Management System</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -33,20 +33,28 @@
   <script type="text/babel">
     const { useState, useEffect } = React;
 
-    // --- Modern SVG Icons ---
+    // --- Icons ---
     const IconWrench = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>;
     const IconLayers = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>;
     const IconHistory = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>;
     const IconPlus = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"/></svg>;
     const IconChart = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>;
-    const IconUserTools = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>;
+    const IconInventory = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>;
     const IconSearch = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>;
     const IconRotate = () => <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>;
-    const IconUpload = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>;
-    const IconTrash = () => <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>;
     const IconClose = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/></svg>;
+    const IconUser = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>;
+    const IconShield = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>;
+    const IconLogOut = () => <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>;
 
-    // --- Initial Seed Database ---
+    // --- Seed Demo Users ---
+    const DEMO_USERS = [
+      { id: 'u-1', name: 'Aarav Patel', rollNo: 'SE-2026-081', email: 'aarav@campus.edu', role: 'Student Borrower', dept: 'Mechanical Engineering', semester: 'Semester 4' },
+      { id: 'u-2', name: 'Dr. K. Sharma', rollNo: 'FAC-MECH-09', email: 'sharma.k@campus.edu', role: 'Faculty Custodian', dept: 'Manufacturing & Workshop', semester: 'Faculty Staff' },
+      { id: 'u-3', name: 'Sneha Roy', rollNo: 'CS-2026-044', email: 'sneha@campus.edu', role: 'Club Lead', dept: 'Robotics & Automation Society', semester: 'Semester 6' }
+    ];
+
+    // --- Seed Tools Database ---
     const SEED_TOOLS = [
       {
         id: 't-101',
@@ -57,7 +65,7 @@
         owner: 'Mechanical Lab A (Prof. Sharma)',
         status: 'Available',
         image: 'https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=600&q=80',
-        description: 'Includes dual 2.0Ah Li-ion batteries, charger, and 30-piece titanium bit set.'
+        description: 'Includes dual 2.0Ah Li-ion batteries, rapid charger, and 30-piece titanium bit set.'
       },
       {
         id: 't-102',
@@ -65,7 +73,7 @@
         category: 'Hand Tools',
         deposit: 400,
         condition: 'Good',
-        owner: 'Pooja M. (Robotics Club)',
+        owner: 'Robotics Club (Sneha R.)',
         status: 'Available',
         image: 'https://images.unsplash.com/photo-1581783342308-f792dbdd27c5?auto=format&fit=crop&w=600&q=80',
         description: '1/4 inch drive chrome vanadium steel set for chassis, engines, and frame mounts.'
@@ -76,7 +84,7 @@
         category: 'Gardening',
         deposit: 600,
         condition: 'Like New',
-        owner: 'Campus Maintenance Desk',
+        owner: 'Campus Estate Maintenance',
         status: 'Borrowed',
         image: 'https://images.unsplash.com/photo-1592417817098-8f3d6ef231f8?auto=format&fit=crop&w=600&q=80',
         description: 'Dual-action 450mm blades with safety two-hand power trigger.'
@@ -87,14 +95,14 @@
         category: 'Measurement',
         deposit: 300,
         condition: 'Good',
-        owner: 'Civil Surveying Dept',
+        owner: 'Civil Surveying Lab',
         status: 'Available',
         image: 'https://images.unsplash.com/photo-1572981779307-38b8cabb2407?auto=format&fit=crop&w=600&q=80',
         description: 'High precision millimeter measurement with auto area and volume calculator.'
       }
     ];
 
-    // --- Local DB Controller ---
+    // --- Local DB Engine ---
     const localDb = {
       getTools: () => {
         const raw = localStorage.getItem('toolshare_db_tools');
@@ -108,7 +116,14 @@
         const raw = localStorage.getItem('toolshare_db_borrows');
         return raw ? JSON.parse(raw) : [];
       },
-      borrowTool: (toolId, borrowerName, days) => {
+      getCurrentUser: () => {
+        const raw = localStorage.getItem('toolshare_db_user');
+        return raw ? JSON.parse(raw) : DEMO_USERS[0];
+      },
+      setCurrentUser: (user) => {
+        localStorage.setItem('toolshare_db_user', JSON.stringify(user));
+      },
+      borrowTool: (toolId, borrowDetails) => {
         const tools = localDb.getTools();
         const tool = tools.find(t => t.id === toolId);
         if (!tool) return null;
@@ -117,16 +132,23 @@
         localStorage.setItem('toolshare_db_tools', JSON.stringify(tools));
 
         const dueDate = new Date();
-        dueDate.setDate(dueDate.getDate() + parseInt(days || 3));
+        dueDate.setDate(dueDate.getDate() + parseInt(borrowDetails.days || 3));
 
         const newBorrow = {
           id: 'b-' + Date.now(),
           toolId,
           toolName: tool.name,
           category: tool.category,
-          borrower: borrowerName || 'Student Checkout',
+          borrower: borrowDetails.borrowerName,
+          rollNo: borrowDetails.rollNo,
+          dept: borrowDetails.dept,
+          purpose: borrowDetails.purpose,
+          pickupPoint: borrowDetails.pickupPoint,
+          timeSlot: borrowDetails.timeSlot,
           borrowDate: new Date().toLocaleDateString(),
           dueDate: dueDate.toLocaleDateString(),
+          cautionDeposit: borrowDetails.calculatedDeposit,
+          safetyApproved: borrowDetails.safetyAccepted,
           status: 'Active'
         };
 
@@ -156,54 +178,95 @@
         localStorage.setItem('toolshare_db_tools', JSON.stringify(tools));
         return tools;
       },
-      deleteTool: (toolId) => {
-        const tools = localDb.getTools().filter(t => t.id !== toolId);
+      deleteTool: (id) => {
+        const tools = localDb.getTools().filter(t => t.id !== id);
         localStorage.setItem('toolshare_db_tools', JSON.stringify(tools));
         return tools;
       },
       reset: () => {
         localStorage.setItem('toolshare_db_tools', JSON.stringify(SEED_TOOLS));
         localStorage.removeItem('toolshare_db_borrows');
-        return { tools: SEED_TOOLS, borrows: [] };
+        localStorage.setItem('toolshare_db_user', JSON.stringify(DEMO_USERS[0]));
+        return { tools: SEED_TOOLS, borrows: [], user: DEMO_USERS[0] };
       }
     };
 
     function App() {
-      const [tab, setTab] = useState('catalog'); // 'catalog' | 'borrows' | 'dashboard' | 'mylistings' | 'list'
+      const [tab, setTab] = useState('catalog');
+      const [currentUser, setCurrentUser] = useState(null);
+      const [showAuthModal, setShowAuthModal] = useState(false);
+      const [authMode, setAuthMode] = useState('login'); // 'login' | 'signup'
+
       const [tools, setTools] = useState([]);
       const [borrows, setBorrows] = useState([]);
       const [search, setSearch] = useState('');
       const [categoryFilter, setCategoryFilter] = useState('All');
       const [selectedTool, setSelectedTool] = useState(null);
-      const [borrowerName, setBorrowerName] = useState('');
-      const [loanDays, setLoanDays] = useState(3);
 
-      // New Tool Form state (with real image upload support)
+      // Auth form state
+      const [authForm, setAuthForm] = useState({
+        name: '',
+        email: '',
+        rollNo: '',
+        dept: 'Mechanical Engineering',
+        role: 'Student Borrower'
+      });
+
+      // Rich Checkout & Borrow Options State
+      const [borrowForm, setBorrowForm] = useState({
+        borrowerName: '',
+        rollNo: '',
+        dept: 'Mechanical Engineering',
+        purpose: 'Course Capstone Project',
+        pickupPoint: 'Central Workshop Counter A',
+        timeSlot: 'Morning (09:00 - 12:00)',
+        days: 3,
+        safetyAccepted: true
+      });
+
+      // Post tool state
       const [newTool, setNewTool] = useState({
         name: '',
         category: 'Power Tools',
         deposit: 500,
-        condition: 'Like New',
+        condition: 'Good',
         owner: '',
         description: '',
         image: ''
       });
-      const [imageMode, setImageMode] = useState('file'); // 'file' or 'url'
+      const [imageMode, setImageMode] = useState('file');
 
       useEffect(() => {
+        const u = localDb.getCurrentUser();
+        setCurrentUser(u);
         setTools(localDb.getTools());
         setBorrows(localDb.getBorrows());
       }, []);
 
+      // Auto-populate borrow form with current authenticated user
+      useEffect(() => {
+        if (currentUser) {
+          setBorrowForm(prev => ({
+            ...prev,
+            borrowerName: currentUser.name,
+            rollNo: currentUser.rollNo,
+            dept: currentUser.dept
+          }));
+          setNewTool(prev => ({
+            ...prev,
+            owner: `${currentUser.name} (${currentUser.rollNo})`
+          }));
+        }
+      }, [currentUser]);
+
       const activeBorrows = borrows.filter(b => b.status === 'Active');
       const availableTools = tools.filter(t => t.status === 'Available');
 
-      // Handle Image File Upload (Converts directly to DataURL Base64)
       const handleImageFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
           if (file.size > 2 * 1024 * 1024) {
-            alert('File size exceeds 2MB limit. Please choose a smaller photo.');
+            alert('File exceeds 2MB limit. Please upload a smaller photo.');
             return;
           }
           const reader = new FileReader();
@@ -216,12 +279,19 @@
 
       const handleConfirmBorrow = (e) => {
         e.preventDefault();
-        const res = localDb.borrowTool(selectedTool.id, borrowerName, loanDays);
+        if (!selectedTool) return;
+
+        const calculatedDeposit = Number(selectedTool.deposit) + (borrowForm.days > 5 ? 150 : 0);
+
+        const res = localDb.borrowTool(selectedTool.id, {
+          ...borrowForm,
+          calculatedDeposit
+        });
+
         if (res) {
           setTools(res.tools);
           setBorrows(res.borrows);
           setSelectedTool(null);
-          setBorrowerName('');
           setTab('borrows');
         }
       };
@@ -234,70 +304,71 @@
         }
       };
 
-      const handleDeleteTool = (id) => {
-        if (confirm('Are you sure you want to remove this tool from the network?')) {
-          const updated = localDb.deleteTool(id);
-          setTools(updated);
-        }
-      };
-
       const handleCreateTool = (e) => {
         e.preventDefault();
-        if (!newTool.name || !newTool.owner) {
-          alert('Please fill out the equipment name and owner.');
-          return;
-        }
-
-        const fallbackImg = 'https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=600&q=80';
+        if (!newTool.name || !newTool.owner) return;
         const updated = localDb.saveTool({
           ...newTool,
-          image: newTool.image || fallbackImg
+          image: newTool.image || 'https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=600&q=80'
         });
-
         setTools(updated);
-        setNewTool({
-          name: '',
-          category: 'Power Tools',
-          deposit: 500,
-          condition: 'Like New',
-          owner: '',
-          description: '',
-          image: ''
-        });
         setTab('catalog');
       };
 
+      const handleQuickSwitchUser = (user) => {
+        localDb.setCurrentUser(user);
+        setCurrentUser(user);
+        setShowAuthModal(false);
+      };
+
+      const handleManualAuth = (e) => {
+        e.preventDefault();
+        const userObj = {
+          id: 'u-' + Date.now(),
+          name: authForm.name || 'Campus Student',
+          email: authForm.email || 'student@campus.edu',
+          rollNo: authForm.rollNo || 'SE-2026-X',
+          dept: authForm.dept,
+          role: authForm.role,
+          semester: 'Enrolled'
+        };
+        localDb.setCurrentUser(userObj);
+        setCurrentUser(userObj);
+        setShowAuthModal(false);
+      };
+
       const filteredTools = tools.filter(t => {
-        const matchQuery = t.name.toLowerCase().includes(search.toLowerCase()) || 
-                           t.description.toLowerCase().includes(search.toLowerCase()) ||
-                           t.owner.toLowerCase().includes(search.toLowerCase());
-        const matchCat = categoryFilter === 'All' || t.category === categoryFilter;
-        return matchQuery && matchCat;
+        const mQuery = t.name.toLowerCase().includes(search.toLowerCase()) || 
+                       t.description.toLowerCase().includes(search.toLowerCase()) ||
+                       t.owner.toLowerCase().includes(search.toLowerCase());
+        const mCat = categoryFilter === 'All' || t.category === categoryFilter;
+        return mQuery && mCat;
       });
 
       return (
-        <div className="min-h-screen flex flex-col bg-slate-50">
-          {/* Header Navigation */}
+        <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
+          
+          {/* Top Global Header */}
           <header className="sticky top-0 z-40 bg-slate-900 border-b border-slate-800 text-white shadow-xl">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
               
               {/* Brand Logo */}
-              <div onClick={() => setTab('catalog')} className="flex items-center gap-2.5 cursor-pointer group">
+              <div onClick={() => setTab('catalog')} className="flex items-center gap-3 cursor-pointer group">
                 <div className="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black group-hover:scale-105 transition-transform shadow-lg shadow-amber-500/20">
                   <IconWrench />
                 </div>
                 <div>
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-2">
                     <span className="font-extrabold tracking-tight text-lg text-white">ToolShare</span>
                     <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                      v2.4 Pro
+                      v3.0 Portal
                     </span>
                   </div>
-                  <p className="text-[10px] text-slate-400 font-medium">Campus Asset Lending System</p>
+                  <p className="text-[10px] text-slate-400">Campus Asset Lending & Auth System</p>
                 </div>
               </div>
 
-              {/* Navigation Items */}
+              {/* Main Nav Tabs */}
               <nav className="flex items-center gap-1 bg-slate-950/80 p-1 rounded-xl border border-slate-800 overflow-x-auto">
                 <button
                   onClick={() => setTab('catalog')}
@@ -306,7 +377,7 @@
                   }`}
                 >
                   <IconLayers />
-                  <span className="hidden sm:inline">Explore</span> Catalog
+                  <span className="hidden sm:inline">Catalog</span>
                   <span className="bg-slate-900/60 text-[10px] px-1.5 py-0.2 rounded-full font-mono">{tools.length}</span>
                 </button>
 
@@ -336,12 +407,12 @@
                 </button>
 
                 <button
-                  onClick={() => setTab('mylistings')}
+                  onClick={() => setTab('inventory')}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
-                    tab === 'mylistings' ? 'bg-amber-500 text-slate-950 font-bold shadow' : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+                    tab === 'inventory' ? 'bg-amber-500 text-slate-950 font-bold shadow' : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
                   }`}
                 >
-                  <IconUserTools />
+                  <IconInventory />
                   <span>Inventory</span>
                 </button>
 
@@ -356,36 +427,80 @@
                 </button>
               </nav>
 
-              {/* Reset Tool */}
-              <button
-                onClick={() => {
-                  if (confirm('Reset database to initial seed data?')) {
-                    const r = localDb.reset();
-                    setTools(r.tools);
-                    setBorrows(r.borrows);
-                  }
-                }}
-                className="hidden md:flex text-[11px] text-slate-400 hover:text-slate-200 border border-slate-800 px-2.5 py-1.5 rounded-lg hover:bg-slate-800 items-center gap-1"
-                title="Reset local storage seed"
-              >
-                Reset DB
-              </button>
+              {/* User Login / Profile Badge */}
+              <div className="flex items-center gap-2">
+                {currentUser ? (
+                  <button
+                    onClick={() => setShowAuthModal(true)}
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700/80 border border-slate-700 transition"
+                  >
+                    <div className="w-6 h-6 rounded-full bg-amber-500 text-slate-950 font-bold flex items-center justify-center text-[10px]">
+                      {currentUser.name[0]}
+                    </div>
+                    <div className="text-left hidden md:block">
+                      <div className="text-xs font-bold text-slate-200 line-clamp-1">{currentUser.name}</div>
+                      <div className="text-[9px] text-amber-400 font-mono">{currentUser.rollNo}</div>
+                    </div>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setShowAuthModal(true)}
+                    className="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold transition shadow"
+                  >
+                    Login / ID
+                  </button>
+                )}
+
+                <button
+                  onClick={() => {
+                    if (confirm('Reset to standard initial seed data?')) {
+                      const r = localDb.reset();
+                      setTools(r.tools);
+                      setBorrows(r.borrows);
+                      setCurrentUser(r.user);
+                    }
+                  }}
+                  className="text-[11px] text-slate-400 hover:text-slate-200 border border-slate-800 px-2 py-1.5 rounded-lg hover:bg-slate-800 hidden lg:block"
+                >
+                  Reset DB
+                </button>
+              </div>
             </div>
           </header>
 
-          {/* Body Views */}
+          {/* Subheader: Active User Context Strip */}
+          <div className="bg-slate-950 text-slate-400 text-xs px-4 py-2 border-b border-slate-800">
+            <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span>Active Profile: <strong className="text-slate-200">{currentUser?.name}</strong> ({currentUser?.role})</span>
+                <span className="text-slate-600">•</span>
+                <span className="hidden sm:inline">{currentUser?.dept}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setShowAuthModal(true)}
+                  className="text-amber-400 hover:underline text-[11px]"
+                >
+                  Switch Role / Re-authenticate
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* View Container */}
           <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full">
 
             {/* TAB 1: CATALOG */}
             {tab === 'catalog' && (
               <div className="space-y-6">
-                {/* Search & Categories Bar */}
+                {/* Search & Filter Bar */}
                 <div className="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col lg:flex-row gap-3 items-center justify-between">
                   <div className="relative w-full lg:w-96">
                     <span className="absolute left-3.5 top-3 text-slate-400"><IconSearch /></span>
                     <input
                       type="text"
-                      placeholder="Search tools, model, owner, or accessories..."
+                      placeholder="Search drills, wrenches, survey kits, or lab custodian..."
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                       className="w-full pl-10 pr-4 py-2 bg-slate-50 hover:bg-slate-100/70 focus:bg-white rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 focus:outline-none transition"
@@ -407,80 +522,73 @@
                   </div>
                 </div>
 
-                {/* Grid */}
-                {filteredTools.length === 0 ? (
-                  <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-slate-300">
-                    <p className="font-bold text-slate-700 text-sm">No items found matching criteria</p>
-                    <p className="text-xs text-slate-400 mt-1">Try relaxing filters or search terms</p>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                    {filteredTools.map(tool => (
-                      <div key={tool.id} className="group bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm hover:shadow-xl hover:border-slate-300 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
-                        <div>
-                          <div className="relative h-48 bg-slate-950 overflow-hidden">
-                            <img
-                              src={tool.image}
-                              alt={tool.name}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                              onError={(e) => {
-                                e.target.src = 'https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=600&q=80';
-                              }}
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent"></div>
+                {/* Catalog Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                  {filteredTools.map(tool => (
+                    <div key={tool.id} className="group bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm hover:shadow-xl hover:border-slate-300 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+                      <div>
+                        <div className="relative h-48 bg-slate-950 overflow-hidden">
+                          <img
+                            src={tool.image}
+                            alt={tool.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            onError={(e) => {
+                              e.target.src = 'https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=600&q=80';
+                            }}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent"></div>
 
-                            <span className={`absolute top-3 right-3 text-[11px] font-bold px-2.5 py-1 rounded-full backdrop-blur-md shadow-sm ${
-                              tool.status === 'Available' ? 'bg-emerald-500/90 text-white' : 'bg-slate-900/80 text-amber-300 border border-amber-500/30'
-                            }`}>
-                              {tool.status}
-                            </span>
-                            <span className="absolute bottom-3 left-3 text-[10px] font-mono tracking-wider uppercase px-2 py-0.5 rounded bg-slate-950/80 text-slate-200 backdrop-blur-md">
-                              {tool.category}
-                            </span>
-                          </div>
-
-                          <div className="p-4">
-                            <h4 className="font-bold text-slate-900 text-sm line-clamp-1 group-hover:text-amber-600 transition">{tool.name}</h4>
-                            <p className="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">{tool.description}</p>
-                            
-                            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                              <span className="truncate max-w-[130px]">Owner: <strong className="text-slate-800 font-semibold">{tool.owner}</strong></span>
-                              <span className="font-mono font-bold text-slate-900">₹{tool.deposit}</span>
-                            </div>
-                          </div>
+                          <span className={`absolute top-3 right-3 text-[11px] font-bold px-2.5 py-1 rounded-full backdrop-blur-md shadow-sm ${
+                            tool.status === 'Available' ? 'bg-emerald-500/90 text-white' : 'bg-slate-900/80 text-amber-300 border border-amber-500/30'
+                          }`}>
+                            {tool.status}
+                          </span>
+                          <span className="absolute bottom-3 left-3 text-[10px] font-mono tracking-wider uppercase px-2 py-0.5 rounded bg-slate-950/80 text-slate-200 backdrop-blur-md">
+                            {tool.category}
+                          </span>
                         </div>
 
-                        <div className="p-4 pt-0">
-                          <button
-                            disabled={tool.status !== 'Available'}
-                            onClick={() => setSelectedTool(tool)}
-                            className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all duration-200 ${
-                              tool.status === 'Available'
-                                ? 'bg-slate-950 hover:bg-amber-500 hover:text-slate-950 text-white shadow-md'
-                                : 'bg-slate-100 text-slate-400 cursor-not-allowed'
-                            }`}
-                          >
-                            {tool.status === 'Available' ? 'Request Equipment' : 'Issued to Peer'}
-                          </button>
+                        <div className="p-4">
+                          <h4 className="font-bold text-slate-900 text-sm line-clamp-1 group-hover:text-amber-600 transition">{tool.name}</h4>
+                          <p className="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">{tool.description}</p>
+                          
+                          <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                            <span className="truncate max-w-[130px]">Owner: <strong className="text-slate-800 font-semibold">{tool.owner}</strong></span>
+                            <span className="font-mono font-bold text-slate-900">₹{tool.deposit}</span>
+                          </div>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                )}
+
+                      <div className="p-4 pt-0">
+                        <button
+                          disabled={tool.status !== 'Available'}
+                          onClick={() => setSelectedTool(tool)}
+                          className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all duration-200 ${
+                            tool.status === 'Available'
+                              ? 'bg-slate-950 hover:bg-amber-500 hover:text-slate-950 text-white shadow-md'
+                              : 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                          }`}
+                        >
+                          {tool.status === 'Available' ? 'Borrow Equipment' : 'Issued to Peer'}
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
 
-            {/* TAB 2: LOANS & CHECKOUTS */}
+            {/* TAB 2: ACTIVE BORROWS & RETURN AUDIT */}
             {tab === 'borrows' && (
               <div className="space-y-6">
                 <div>
-                  <h3 className="font-bold text-slate-900 text-lg">Active Checkout Records</h3>
-                  <p className="text-xs text-slate-500 mb-4">Track due dates, loan periods, and process returns</p>
+                  <h3 className="font-bold text-slate-900 text-lg">Active Checkout Registry</h3>
+                  <p className="text-xs text-slate-500 mb-4">Real-time custody tracking, project usage notes, and return approvals</p>
 
                   {activeBorrows.length === 0 ? (
                     <div className="bg-white p-12 text-center rounded-2xl border border-dashed border-slate-300">
-                      <p className="font-bold text-slate-700 text-sm">All equipment accounted for</p>
-                      <p className="text-xs text-slate-400 mt-1">No outstanding checked-out gear at this moment.</p>
+                      <p className="font-bold text-slate-700 text-sm">No Active Loans</p>
+                      <p className="text-xs text-slate-400 mt-1">All university assets are currently checked in and available in the catalog.</p>
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -495,17 +603,25 @@
                             </div>
 
                             <h4 className="font-bold text-slate-900 mt-2 text-base">{item.toolName}</h4>
-                            <p className="text-xs text-slate-500 mt-1">Borrower: <strong className="text-slate-800">{item.borrower}</strong></p>
-                            <p className="text-[11px] text-slate-400">Issued On: {item.borrowDate}</p>
+                            
+                            {/* Rich Borrow Metadata Card */}
+                            <div className="mt-3 p-3 bg-slate-50 rounded-xl space-y-1 text-xs border border-slate-100">
+                              <p>Custodian: <strong className="text-slate-800">{item.borrower}</strong> ({item.rollNo || 'N/A'})</p>
+                              <p>Department: <span className="text-slate-600">{item.dept}</span></p>
+                              <p>Purpose: <span className="text-slate-600">{item.purpose || 'Project Testing'}</span></p>
+                              <p>Pickup Desk: <span className="text-slate-600">{item.pickupPoint}</span></p>
+                              <p>Collection Window: <span className="text-slate-600">{item.timeSlot}</span></p>
+                              <p>Secured Deposit: <strong className="text-slate-900 font-mono">₹{item.cautionDeposit}</strong></p>
+                            </div>
                           </div>
 
                           <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center">
-                            <span className="text-xs text-slate-500">Status: <strong className="text-amber-600">In Active Use</strong></span>
+                            <span className="text-xs text-slate-500">Status: <strong className="text-amber-600">In Active Loan</strong></span>
                             <button
                               onClick={() => handleReturn(item.id)}
                               className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3.5 py-1.5 rounded-xl transition"
                             >
-                              <IconRotate /> Mark Returned
+                              <IconRotate /> Confirm Return & Refund
                             </button>
                           </div>
                         </div>
@@ -516,15 +632,15 @@
 
                 {borrows.filter(b => b.status === 'Returned').length > 0 && (
                   <div>
-                    <h4 className="font-bold text-slate-700 text-xs uppercase tracking-wider mb-2">Loan Audit & Return Ledger</h4>
+                    <h4 className="font-bold text-slate-700 text-xs uppercase tracking-wider mb-2">Historical Loan Audit</h4>
                     <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden text-xs shadow-sm">
                       {borrows.filter(b => b.status === 'Returned').map(b => (
                         <div key={b.id} className="p-3.5 border-b border-slate-100 flex justify-between items-center hover:bg-slate-50">
                           <div>
                             <span className="font-semibold text-slate-900">{b.toolName}</span>
-                            <span className="text-slate-400 ml-2">by {b.borrower}</span>
+                            <span className="text-slate-400 ml-2">by {b.borrower} ({b.rollNo})</span>
                           </div>
-                          <span className="text-emerald-700 font-medium">Checked in on {b.returnedDate}</span>
+                          <span className="text-emerald-700 font-medium">Returned on {b.returnedDate}</span>
                         </div>
                       ))}
                     </div>
@@ -533,15 +649,14 @@
               </div>
             )}
 
-            {/* TAB 3: DASHBOARD & ANALYTICS */}
+            {/* TAB 3: ANALYTICS DASHBOARD */}
             {tab === 'dashboard' && (
               <div className="space-y-6">
                 <div>
-                  <h3 className="font-bold text-slate-900 text-lg">System Dashboard & Performance</h3>
-                  <p className="text-xs text-slate-500">Overview of resource circulation across campus</p>
+                  <h3 className="font-bold text-slate-900 text-lg">Platform Circulation & Health Metrics</h3>
+                  <p className="text-xs text-slate-500">Resource efficiency and sharing trends across engineering labs</p>
                 </div>
 
-                {/* Metric Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                   <div className="bg-slate-900 text-white p-5 rounded-2xl border border-slate-800 shadow">
                     <span className="text-[10px] font-bold text-amber-400 uppercase tracking-widest">Total Inventory</span>
@@ -556,13 +671,13 @@
                   </div>
 
                   <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">On Active Loan</span>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active Loans</span>
                     <h4 className="text-3xl font-extrabold text-amber-600 mt-1">{activeBorrows.length}</h4>
-                    <p className="text-xs text-slate-500 mt-1">Circulating in projects</p>
+                    <p className="text-xs text-slate-500 mt-1">In circulation</p>
                   </div>
 
                   <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Utilization</span>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Circulation Rate</span>
                     <h4 className="text-3xl font-extrabold text-slate-900 mt-1">
                       {tools.length > 0 ? Math.round((activeBorrows.length / tools.length) * 100) : 0}%
                     </h4>
@@ -570,9 +685,8 @@
                   </div>
                 </div>
 
-                {/* Category Distribution Bar */}
                 <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                  <h4 className="font-bold text-slate-900 text-sm mb-3">Inventory by Department Category</h4>
+                  <h4 className="font-bold text-slate-900 text-sm mb-3">Tool Distribution by Category</h4>
                   <div className="space-y-3">
                     {['Power Tools', 'Hand Tools', 'Gardening', 'Measurement'].map(c => {
                       const count = tools.filter(t => t.category === c).length;
@@ -594,19 +708,19 @@
               </div>
             )}
 
-            {/* TAB 4: MY INVENTORY & MANAGEMENT */}
-            {tab === 'mylistings' && (
+            {/* TAB 4: INVENTORY MANAGEMENT */}
+            {tab === 'inventory' && (
               <div className="space-y-6">
                 <div className="flex justify-between items-center">
                   <div>
-                    <h3 className="font-bold text-slate-900 text-lg">Equipment Management</h3>
-                    <p className="text-xs text-slate-500">Edit, inspect, or retire items from the shared database</p>
+                    <h3 className="font-bold text-slate-900 text-lg">Equipment Master Registry</h3>
+                    <p className="text-xs text-slate-500">Manage all items, monitor custodians, or decommission obsolete tools</p>
                   </div>
                   <button
                     onClick={() => setTab('list')}
                     className="flex items-center gap-1 bg-slate-900 hover:bg-amber-500 hover:text-slate-950 text-white text-xs font-bold px-3 py-2 rounded-xl transition"
                   >
-                    <IconPlus /> Add Item
+                    <IconPlus /> Add New Asset
                   </button>
                 </div>
 
@@ -614,9 +728,9 @@
                   <table className="w-full text-left text-xs">
                     <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase font-semibold">
                       <tr>
-                        <th className="p-3.5 pl-5">Tool</th>
+                        <th className="p-3.5 pl-5">Asset</th>
                         <th className="p-3.5">Category</th>
-                        <th className="p-3.5">Custodian</th>
+                        <th className="p-3.5">Owner/Lab</th>
                         <th className="p-3.5">Deposit</th>
                         <th className="p-3.5">Status</th>
                         <th className="p-3.5 text-right pr-5">Action</th>
@@ -641,11 +755,14 @@
                           </td>
                           <td className="p-3.5 text-right pr-5">
                             <button
-                              onClick={() => handleDeleteTool(tool.id)}
-                              className="p-1.5 text-slate-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition"
-                              title="Delete Item"
+                              onClick={() => {
+                                if (confirm('Decommission this tool from the library?')) {
+                                  setTools(localDb.deleteTool(tool.id));
+                                }
+                              }}
+                              className="text-red-500 hover:text-red-700 text-xs font-semibold"
                             >
-                              <IconTrash />
+                              Delete
                             </button>
                           </td>
                         </tr>
@@ -656,7 +773,7 @@
               </div>
             )}
 
-            {/* TAB 5: POST A TOOL WITH IMAGE UPLOAD */}
+            {/* TAB 5: POST A TOOL (WITH LOCAL FILE UPLOAD) */}
             {tab === 'list' && (
               <div className="max-w-2xl mx-auto bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xl">
                 <div className="flex items-center gap-3 mb-6 pb-5 border-b border-slate-100">
@@ -664,8 +781,8 @@
                     <IconPlus />
                   </div>
                   <div>
-                    <h3 className="text-base font-bold text-slate-900">List an Asset for Lending</h3>
-                    <p className="text-xs text-slate-500">Provide photos and hardware specifications for students to borrow</p>
+                    <h3 className="text-base font-bold text-slate-900">List an Asset for Campus Sharing</h3>
+                    <p className="text-xs text-slate-500">Provide equipment specifications for peer borrowing</p>
                   </div>
                 </div>
 
@@ -698,7 +815,7 @@
                     </div>
 
                     <div>
-                      <label className="block font-semibold text-slate-700 mb-1">Caution Deposit (₹)</label>
+                      <label className="block font-semibold text-slate-700 mb-1">Standard Deposit (₹)</label>
                       <input
                         type="number"
                         value={newTool.deposit}
@@ -714,7 +831,6 @@
                       <input
                         type="text"
                         required
-                        placeholder="e.g. Rahul Verma (ME-301)"
                         value={newTool.owner}
                         onChange={(e) => setNewTool({ ...newTool, owner: e.target.value })}
                         className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200"
@@ -722,7 +838,7 @@
                     </div>
 
                     <div>
-                      <label className="block font-semibold text-slate-700 mb-1">Physical Condition</label>
+                      <label className="block font-semibold text-slate-700 mb-1">Working Condition</label>
                       <select
                         value={newTool.condition}
                         onChange={(e) => setNewTool({ ...newTool, condition: e.target.value })}
@@ -736,10 +852,10 @@
                     </div>
                   </div>
 
-                  {/* IMAGE UPLOAD / URL SWITCHER */}
+                  {/* Image Upload Component */}
                   <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
                     <div className="flex justify-between items-center">
-                      <label className="block font-bold text-slate-800">Add Tool Photograph</label>
+                      <label className="block font-bold text-slate-800">Tool Image</label>
                       <div className="flex gap-2">
                         <button
                           type="button"
@@ -757,7 +873,7 @@
                             imageMode === 'url' ? 'bg-slate-900 text-white' : 'bg-white border text-slate-600'
                           }`}
                         >
-                          Image Link (URL)
+                          URL
                         </button>
                       </div>
                     </div>
@@ -770,44 +886,30 @@
                           onChange={handleImageFileChange}
                           className="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100 cursor-pointer"
                         />
-                        <p className="text-[10px] text-slate-400 mt-1">Upload JPG, PNG or WebP from your device (Max 2MB)</p>
                       </div>
                     ) : (
-                      <div>
-                        <input
-                          type="url"
-                          placeholder="https://images.unsplash.com/photo-..."
-                          value={newTool.image}
-                          onChange={(e) => setNewTool({ ...newTool, image: e.target.value })}
-                          className="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-white font-mono text-[11px]"
-                        />
-                      </div>
+                      <input
+                        type="url"
+                        placeholder="https://..."
+                        value={newTool.image}
+                        onChange={(e) => setNewTool({ ...newTool, image: e.target.value })}
+                        className="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-white font-mono text-[11px]"
+                      />
                     )}
 
-                    {/* Image Preview */}
                     {newTool.image && (
-                      <div className="mt-2 flex items-center gap-3 p-2 bg-white rounded-lg border border-slate-200">
+                      <div className="flex items-center gap-3 p-2 bg-white rounded-lg border border-slate-200">
                         <img src={newTool.image} className="w-16 h-12 object-cover rounded-md" alt="Preview" />
-                        <div className="flex-1 overflow-hidden">
-                          <span className="text-[10px] font-bold text-emerald-600 block">Image Ready</span>
-                          <span className="text-[10px] text-slate-400 truncate block">Will be displayed on public catalog</span>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => setNewTool(prev => ({ ...prev, image: '' }))}
-                          className="text-xs text-red-500 hover:text-red-700 p-1"
-                        >
-                          Clear
-                        </button>
+                        <span className="text-[10px] text-emerald-600 font-bold">Image loaded successfully</span>
                       </div>
                     )}
                   </div>
 
                   <div>
-                    <label className="block font-semibold text-slate-700 mb-1">Description & Included Bits/Cables</label>
+                    <label className="block font-semibold text-slate-700 mb-1">Description & Included Bits</label>
                     <textarea
                       rows="3"
-                      placeholder="Mention battery type, safety guards, or special usage requirements..."
+                      placeholder="Specify drill bits, protective case, cables..."
                       value={newTool.description}
                       onChange={(e) => setNewTool({ ...newTool, description: e.target.value })}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200"
@@ -825,47 +927,129 @@
             )}
           </main>
 
-          {/* Borrow Confirmation Modal */}
+          {/* ADVANCED CHECKOUT & BORROW MODAL WITH EXTENDED OPTIONS */}
           {selectedTool && (
-            <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-              <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 relative">
-                <button onClick={() => setSelectedTool(null)} className="absolute right-4 top-4 text-slate-400 hover:text-slate-700">
+            <div className="fixed inset-0 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
+              <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 relative my-8">
+                <button
+                  onClick={() => setSelectedTool(null)}
+                  className="absolute right-4 top-4 text-slate-400 hover:text-slate-700 p-1 rounded-lg"
+                >
                   <IconClose />
                 </button>
-                <span className="text-[10px] font-mono text-amber-600 font-bold uppercase tracking-wider">Loan Confirmation</span>
-                <h3 className="font-bold text-slate-900 text-lg mt-1">{selectedTool.name}</h3>
-                <p className="text-xs text-slate-500">Asset owner: {selectedTool.owner}</p>
 
-                <form onSubmit={handleConfirmBorrow} className="mt-4 space-y-3.5 text-xs">
+                <span className="text-[10px] font-mono text-amber-600 font-bold uppercase tracking-wider">Asset Loan Agreement</span>
+                <h3 className="font-extrabold text-slate-900 text-xl mt-1">{selectedTool.name}</h3>
+                <p className="text-xs text-slate-500">Asset Custodian: <strong>{selectedTool.owner}</strong></p>
+
+                <form onSubmit={handleConfirmBorrow} className="mt-5 space-y-4 text-xs">
+                  
+                  {/* User credentials */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-semibold text-slate-700 mb-1">Student / Borrower Name *</label>
+                      <input
+                        type="text"
+                        required
+                        value={borrowForm.borrowerName}
+                        onChange={(e) => setBorrowForm({ ...borrowForm, borrowerName: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-semibold text-slate-700 mb-1">Student Roll No / Staff ID *</label>
+                      <input
+                        type="text"
+                        required
+                        value={borrowForm.rollNo}
+                        onChange={(e) => setBorrowForm({ ...borrowForm, rollNo: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 font-mono"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Project Purpose */}
                   <div>
-                    <label className="block font-semibold text-slate-700 mb-1">Your Name / Student Roll No. *</label>
+                    <label className="block font-semibold text-slate-700 mb-1">Purpose of Loan *</label>
+                    <select
+                      value={borrowForm.purpose}
+                      onChange={(e) => setBorrowForm({ ...borrowForm, purpose: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white"
+                    >
+                      <option>Course Capstone / Semester Project</option>
+                      <option>Technical Club Event / Hackathon</option>
+                      <option>Hostel / Dormitory Maintenance</option>
+                      <option>Personal Prototype Development</option>
+                      <option>Inter-Collegiate Competition</option>
+                    </select>
+                  </div>
+
+                  {/* Pickup Point & Time Window */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-semibold text-slate-700 mb-1">Pickup Counter *</label>
+                      <select
+                        value={borrowForm.pickupPoint}
+                        onChange={(e) => setBorrowForm({ ...borrowForm, pickupPoint: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-[11px]"
+                      >
+                        <option>Central Workshop Counter A</option>
+                        <option>Electronics Lab Desk (Room 302)</option>
+                        <option>Student Activity Center Desk</option>
+                        <option>Campus Security Main Gate Post</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block font-semibold text-slate-700 mb-1">Collection Slot *</label>
+                      <select
+                        value={borrowForm.timeSlot}
+                        onChange={(e) => setBorrowForm({ ...borrowForm, timeSlot: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-[11px]"
+                      >
+                        <option>Morning (09:00 - 12:00)</option>
+                        <option>Afternoon (13:00 - 16:00)</option>
+                        <option>Evening (16:30 - 18:30)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Loan Duration */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-semibold text-slate-700 mb-1">Duration (Days)</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="14"
+                        value={borrowForm.days}
+                        onChange={(e) => setBorrowForm({ ...borrowForm, days: Number(e.target.value) })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 font-mono"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-semibold text-slate-700 mb-1">Caution Deposit</label>
+                      <div className="w-full px-3 py-2 rounded-xl bg-slate-100 border border-slate-200 font-mono font-bold text-slate-900">
+                        ₹{Number(selectedTool.deposit) + (borrowForm.days > 5 ? 150 : 0)}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Safety & Compliance Checkbox */}
+                  <label className="flex items-start gap-2 pt-1 cursor-pointer">
                     <input
-                      type="text"
+                      type="checkbox"
                       required
-                      placeholder="e.g. Priya Shah (SE-089)"
-                      value={borrowerName}
-                      onChange={(e) => setBorrowerName(e.target.value)}
-                      className="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                      checked={borrowForm.safetyAccepted}
+                      onChange={(e) => setBorrowForm({ ...borrowForm, safetyAccepted: e.target.checked })}
+                      className="mt-1 rounded text-amber-600 focus:ring-amber-500"
                     />
-                  </div>
+                    <span className="text-[11px] text-slate-600 leading-tight">
+                      I agree to wear proper PPE and return this hardware before the specified due date in original operating condition.
+                    </span>
+                  </label>
 
-                  <div>
-                    <label className="block font-semibold text-slate-700 mb-1">Loan Period (Days)</label>
-                    <input
-                      type="number"
-                      min="1"
-                      max="14"
-                      value={loanDays}
-                      onChange={(e) => setLoanDays(e.target.value)}
-                      className="w-full px-3.5 py-2 rounded-xl border border-slate-200 font-mono"
-                    />
-                  </div>
-
-                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-slate-600 text-[11px]">
-                    Caution Deposit: <strong className="text-slate-900 font-mono">₹{selectedTool.deposit}</strong> (Refunded upon check-in without damage).
-                  </div>
-
-                  <div className="flex justify-end gap-2 pt-2">
+                  <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
                     <button
                       type="button"
                       onClick={() => setSelectedTool(null)}
@@ -875,9 +1059,9 @@
                     </button>
                     <button
                       type="submit"
-                      className="px-4 py-2 bg-slate-950 hover:bg-amber-500 hover:text-slate-950 text-white rounded-xl font-bold transition"
+                      className="px-5 py-2 bg-slate-950 hover:bg-amber-500 hover:text-slate-950 text-white rounded-xl font-bold transition shadow-md"
                     >
-                      Confirm Checkout
+                      Authorize & Issue Loan
                     </button>
                   </div>
                 </form>
@@ -885,8 +1069,86 @@
             </div>
           )}
 
+          {/* AUTH & PROFILE SWITCHER MODAL */}
+          {showAuthModal && (
+            <div className="fixed inset-0 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+              <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 relative">
+                <button
+                  onClick={() => setShowAuthModal(false)}
+                  className="absolute right-4 top-4 text-slate-400 hover:text-slate-700 p-1 rounded-lg"
+                >
+                  <IconClose />
+                </button>
+
+                <h3 className="font-extrabold text-slate-900 text-lg">Identity & Access Control</h3>
+                <p className="text-xs text-slate-500 mb-4">Switch mock student personas or sign in with university credentials</p>
+
+                {/* 1-Click Quick Personas for Evaluation */}
+                <div className="space-y-2 mb-6">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">1-Click Quick Demo Profiles</span>
+                  {DEMO_USERS.map(user => (
+                    <button
+                      key={user.id}
+                      onClick={() => handleQuickSwitchUser(user)}
+                      className={`w-full p-3 rounded-xl border text-left flex items-center justify-between transition ${
+                        currentUser?.id === user.id ? 'border-amber-500 bg-amber-50/50' : 'border-slate-200 hover:bg-slate-50'
+                      }`}
+                    >
+                      <div>
+                        <div className="text-xs font-bold text-slate-900">{user.name}</div>
+                        <div className="text-[10px] text-slate-500">{user.role} • {user.dept}</div>
+                      </div>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white border border-slate-200 font-bold">
+                        {user.rollNo}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+
+                <div className="border-t border-slate-200 pt-4">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-3">Custom Login Form</span>
+                  <form onSubmit={handleManualAuth} className="space-y-3 text-xs">
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="Full Name"
+                        value={authForm.name}
+                        onChange={(e) => setAuthForm({ ...authForm, name: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200"
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <input
+                        type="text"
+                        placeholder="Student ID / Roll No."
+                        value={authForm.rollNo}
+                        onChange={(e) => setAuthForm({ ...authForm, rollNo: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 font-mono"
+                      />
+                      <select
+                        value={authForm.role}
+                        onChange={(e) => setAuthForm({ ...authForm, role: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white"
+                      >
+                        <option>Student Borrower</option>
+                        <option>Faculty Custodian</option>
+                        <option>Club Lead</option>
+                      </select>
+                    </div>
+                    <button
+                      type="submit"
+                      className="w-full py-2 bg-slate-950 hover:bg-amber-500 hover:text-slate-950 text-white font-bold rounded-xl transition"
+                    >
+                      Log In with ID
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          )}
+
           <footer className="border-t border-slate-200 bg-white py-4 text-center text-xs text-slate-400">
-            ToolShare Library • 2nd Year Field Project • Persistent Local Database
+            ToolShare Enterprise Portal • Field Project Demonstration • GitHub Pages Ready
           </footer>
         </div>
       );

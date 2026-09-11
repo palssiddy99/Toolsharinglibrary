@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ToolShare — Campus Tool Library</title>
+  <title>ToolShare — Campus Asset Lending Network</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -12,18 +12,19 @@
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   
-  <!-- Babel to transpile JSX live in-browser -->
+  <!-- Babel for live JSX parsing -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 
   <style>
     body { font-family: 'Inter', sans-serif; }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased selection:bg-amber-400 selection:text-slate-950">
@@ -32,76 +33,79 @@
   <script type="text/babel">
     const { useState, useEffect } = React;
 
-    // --- SVG Icons ---
+    // --- Modern SVG Icons ---
     const IconWrench = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>;
     const IconLayers = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>;
     const IconHistory = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>;
     const IconPlus = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"/></svg>;
+    const IconChart = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>;
+    const IconUserTools = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>;
     const IconSearch = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>;
-    const IconCheck = () => <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/></svg>;
     const IconRotate = () => <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>;
+    const IconUpload = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>;
+    const IconTrash = () => <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>;
     const IconClose = () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/></svg>;
 
-    // --- Seed Data ---
+    // --- Initial Seed Database ---
     const SEED_TOOLS = [
       {
         id: 't-101',
-        name: 'Bosch 18V Cordless Drill Kit',
+        name: 'Bosch Professional 18V Cordless Drill',
         category: 'Power Tools',
         deposit: 750,
         condition: 'Excellent',
-        owner: 'Rahul S. (Mechanical Lab)',
+        owner: 'Mechanical Lab A (Prof. Sharma)',
         status: 'Available',
         image: 'https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=600&q=80',
-        description: 'Includes dual 2.0Ah batteries, rapid charger, and complete titanium drill bit set.'
+        description: 'Includes dual 2.0Ah Li-ion batteries, charger, and 30-piece titanium bit set.'
       },
       {
         id: 't-102',
-        name: '46-Piece Precision Ratchet Wrench Set',
+        name: '46-Piece Precision Ratchet Socket Set',
         category: 'Hand Tools',
         deposit: 400,
         condition: 'Good',
         owner: 'Pooja M. (Robotics Club)',
         status: 'Available',
         image: 'https://images.unsplash.com/photo-1581783342308-f792dbdd27c5?auto=format&fit=crop&w=600&q=80',
-        description: 'Chrome vanadium alloy with quick-release ratchet handle. Suitable for vehicle and machine builds.'
+        description: '1/4 inch drive chrome vanadium steel set for chassis, engines, and frame mounts.'
       },
       {
         id: 't-103',
-        name: '550W Electric Dual-Action Trimmer',
+        name: 'Electric Hedge Trimmer 550W',
         category: 'Gardening',
         deposit: 600,
         condition: 'Like New',
         owner: 'Campus Maintenance Desk',
         status: 'Borrowed',
         image: 'https://images.unsplash.com/photo-1592417817098-8f3d6ef231f8?auto=format&fit=crop&w=600&q=80',
-        description: 'Lightweight ergonomic design with 450mm safety reciprocating blade.'
+        description: 'Dual-action 450mm blades with safety two-hand power trigger.'
       },
       {
         id: 't-104',
-        name: '40M Digital Laser Distance Meter',
+        name: 'Digital Laser Rangefinder 40M',
         category: 'Measurement',
         deposit: 300,
         condition: 'Good',
-        owner: 'Civil Engg Survey Dept',
+        owner: 'Civil Surveying Dept',
         status: 'Available',
         image: 'https://images.unsplash.com/photo-1572981779307-38b8cabb2407?auto=format&fit=crop&w=600&q=80',
-        description: 'Millimeter-accurate laser rangefinder with real-time Pythagorean area and volume mode.'
+        description: 'High precision millimeter measurement with auto area and volume calculator.'
       }
     ];
 
-    // --- Local Database Handler ---
+    // --- Local DB Controller ---
     const localDb = {
       getTools: () => {
-        const raw = localStorage.getItem('toolshare_tools');
+        const raw = localStorage.getItem('toolshare_db_tools');
         if (!raw) {
-          localStorage.setItem('toolshare_tools', JSON.stringify(SEED_TOOLS));
+          localStorage.setItem('toolshare_db_tools', JSON.stringify(SEED_TOOLS));
           return SEED_TOOLS;
         }
         return JSON.parse(raw);
       },
       getBorrows: () => {
-        const raw = localStorage.getItem('toolshare_borrows');
+        const raw = localStorage.getItem('toolshare_db_borrows');
         return raw ? JSON.parse(raw) : [];
       },
       borrowTool: (toolId, borrowerName, days) => {
@@ -110,7 +114,7 @@
         if (!tool) return null;
 
         tool.status = 'Borrowed';
-        localStorage.setItem('toolshare_tools', JSON.stringify(tools));
+        localStorage.setItem('toolshare_db_tools', JSON.stringify(tools));
 
         const dueDate = new Date();
         dueDate.setDate(dueDate.getDate() + parseInt(days || 3));
@@ -127,7 +131,7 @@
         };
 
         const borrows = [newBorrow, ...localDb.getBorrows()];
-        localStorage.setItem('toolshare_borrows', JSON.stringify(borrows));
+        localStorage.setItem('toolshare_db_borrows', JSON.stringify(borrows));
         return { tools, borrows };
       },
       returnTool: (borrowId) => {
@@ -137,43 +141,54 @@
 
         borrow.status = 'Returned';
         borrow.returnedDate = new Date().toLocaleDateString();
-        localStorage.setItem('toolshare_borrows', JSON.stringify(borrows));
+        localStorage.setItem('toolshare_db_borrows', JSON.stringify(borrows));
 
         const tools = localDb.getTools();
         const tool = tools.find(t => t.id === borrow.toolId);
         if (tool) {
           tool.status = 'Available';
-          localStorage.setItem('toolshare_tools', JSON.stringify(tools));
+          localStorage.setItem('toolshare_db_tools', JSON.stringify(tools));
         }
         return { tools, borrows };
       },
       saveTool: (tool) => {
         const tools = [{ ...tool, id: 't-' + Date.now(), status: 'Available' }, ...localDb.getTools()];
-        localStorage.setItem('toolshare_tools', JSON.stringify(tools));
+        localStorage.setItem('toolshare_db_tools', JSON.stringify(tools));
+        return tools;
+      },
+      deleteTool: (toolId) => {
+        const tools = localDb.getTools().filter(t => t.id !== toolId);
+        localStorage.setItem('toolshare_db_tools', JSON.stringify(tools));
         return tools;
       },
       reset: () => {
-        localStorage.setItem('toolshare_tools', JSON.stringify(SEED_TOOLS));
-        localStorage.removeItem('toolshare_borrows');
+        localStorage.setItem('toolshare_db_tools', JSON.stringify(SEED_TOOLS));
+        localStorage.removeItem('toolshare_db_borrows');
         return { tools: SEED_TOOLS, borrows: [] };
       }
     };
 
-    // --- Main Application Component ---
     function App() {
-      const [tab, setTab] = useState('catalog');
+      const [tab, setTab] = useState('catalog'); // 'catalog' | 'borrows' | 'dashboard' | 'mylistings' | 'list'
       const [tools, setTools] = useState([]);
       const [borrows, setBorrows] = useState([]);
       const [search, setSearch] = useState('');
-      const [catFilter, setCatFilter] = useState('All');
+      const [categoryFilter, setCategoryFilter] = useState('All');
       const [selectedTool, setSelectedTool] = useState(null);
       const [borrowerName, setBorrowerName] = useState('');
       const [loanDays, setLoanDays] = useState(3);
 
-      // New Tool Form State
+      // New Tool Form state (with real image upload support)
       const [newTool, setNewTool] = useState({
-        name: '', category: 'Power Tools', deposit: 500, condition: 'Good', owner: '', description: '', image: ''
+        name: '',
+        category: 'Power Tools',
+        deposit: 500,
+        condition: 'Like New',
+        owner: '',
+        description: '',
+        image: ''
       });
+      const [imageMode, setImageMode] = useState('file'); // 'file' or 'url'
 
       useEffect(() => {
         setTools(localDb.getTools());
@@ -181,6 +196,23 @@
       }, []);
 
       const activeBorrows = borrows.filter(b => b.status === 'Active');
+      const availableTools = tools.filter(t => t.status === 'Available');
+
+      // Handle Image File Upload (Converts directly to DataURL Base64)
+      const handleImageFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          if (file.size > 2 * 1024 * 1024) {
+            alert('File size exceeds 2MB limit. Please choose a smaller photo.');
+            return;
+          }
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setNewTool(prev => ({ ...prev, image: reader.result }));
+          };
+          reader.readAsDataURL(file);
+        }
+      };
 
       const handleConfirmBorrow = (e) => {
         e.preventDefault();
@@ -202,55 +234,86 @@
         }
       };
 
+      const handleDeleteTool = (id) => {
+        if (confirm('Are you sure you want to remove this tool from the network?')) {
+          const updated = localDb.deleteTool(id);
+          setTools(updated);
+        }
+      };
+
       const handleCreateTool = (e) => {
         e.preventDefault();
-        if (!newTool.name || !newTool.owner) return;
+        if (!newTool.name || !newTool.owner) {
+          alert('Please fill out the equipment name and owner.');
+          return;
+        }
+
+        const fallbackImg = 'https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=600&q=80';
         const updated = localDb.saveTool({
           ...newTool,
-          image: newTool.image || 'https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=600&q=80'
+          image: newTool.image || fallbackImg
         });
+
         setTools(updated);
-        setNewTool({ name: '', category: 'Power Tools', deposit: 500, condition: 'Good', owner: '', description: '', image: '' });
+        setNewTool({
+          name: '',
+          category: 'Power Tools',
+          deposit: 500,
+          condition: 'Like New',
+          owner: '',
+          description: '',
+          image: ''
+        });
         setTab('catalog');
       };
 
       const filteredTools = tools.filter(t => {
-        const matchesSearch = t.name.toLowerCase().includes(search.toLowerCase()) || t.description.toLowerCase().includes(search.toLowerCase());
-        const matchesCat = catFilter === 'All' || t.category === catFilter;
-        return matchesSearch && matchesCat;
+        const matchQuery = t.name.toLowerCase().includes(search.toLowerCase()) || 
+                           t.description.toLowerCase().includes(search.toLowerCase()) ||
+                           t.owner.toLowerCase().includes(search.toLowerCase());
+        const matchCat = categoryFilter === 'All' || t.category === categoryFilter;
+        return matchQuery && matchCat;
       });
 
       return (
-        <div className="min-h-screen flex flex-col">
-          {/* Top Bar */}
-          <header className="sticky top-0 z-30 bg-slate-900 border-b border-slate-800 text-white shadow-lg">
+        <div className="min-h-screen flex flex-col bg-slate-50">
+          {/* Header Navigation */}
+          <header className="sticky top-0 z-40 bg-slate-900 border-b border-slate-800 text-white shadow-xl">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
-              <div onClick={() => setTab('catalog')} className="flex items-center gap-2.5 cursor-pointer">
-                <div className="w-9 h-9 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black">
+              
+              {/* Brand Logo */}
+              <div onClick={() => setTab('catalog')} className="flex items-center gap-2.5 cursor-pointer group">
+                <div className="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black group-hover:scale-105 transition-transform shadow-lg shadow-amber-500/20">
                   <IconWrench />
                 </div>
                 <div>
-                  <span className="font-bold tracking-tight text-white text-base sm:text-lg">ToolShare</span>
-                  <span className="ml-2 text-[10px] font-mono uppercase px-1.5 py-0.5 bg-amber-500/20 text-amber-300 rounded border border-amber-500/30">Field Project</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-extrabold tracking-tight text-lg text-white">ToolShare</span>
+                    <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                      v2.4 Pro
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-slate-400 font-medium">Campus Asset Lending System</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-1.5 bg-slate-950/70 p-1 rounded-xl border border-slate-800">
+              {/* Navigation Items */}
+              <nav className="flex items-center gap-1 bg-slate-950/80 p-1 rounded-xl border border-slate-800 overflow-x-auto">
                 <button
                   onClick={() => setTab('catalog')}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
-                    tab === 'catalog' ? 'bg-amber-500 text-slate-950 font-bold shadow' : 'text-slate-400 hover:text-white'
+                    tab === 'catalog' ? 'bg-amber-500 text-slate-950 font-bold shadow' : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
                   }`}
                 >
                   <IconLayers />
-                  <span>Catalog</span>
-                  <span className="bg-slate-900/60 text-[10px] px-1.5 py-0.2 rounded-full">{tools.length}</span>
+                  <span className="hidden sm:inline">Explore</span> Catalog
+                  <span className="bg-slate-900/60 text-[10px] px-1.5 py-0.2 rounded-full font-mono">{tools.length}</span>
                 </button>
 
                 <button
                   onClick={() => setTab('borrows')}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
-                    tab === 'borrows' ? 'bg-amber-500 text-slate-950 font-bold shadow' : 'text-slate-400 hover:text-white'
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition relative ${
+                    tab === 'borrows' ? 'bg-amber-500 text-slate-950 font-bold shadow' : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
                   }`}
                 >
                   <IconHistory />
@@ -263,68 +326,79 @@
                 </button>
 
                 <button
+                  onClick={() => setTab('dashboard')}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                    tab === 'dashboard' ? 'bg-amber-500 text-slate-950 font-bold shadow' : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+                  }`}
+                >
+                  <IconChart />
+                  <span>Analytics</span>
+                </button>
+
+                <button
+                  onClick={() => setTab('mylistings')}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                    tab === 'mylistings' ? 'bg-amber-500 text-slate-950 font-bold shadow' : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+                  }`}
+                >
+                  <IconUserTools />
+                  <span>Inventory</span>
+                </button>
+
+                <button
                   onClick={() => setTab('list')}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
-                    tab === 'list' ? 'bg-amber-500 text-slate-950 font-bold shadow' : 'text-slate-400 hover:text-white'
+                    tab === 'list' ? 'bg-amber-500 text-slate-950 font-bold shadow' : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
                   }`}
                 >
                   <IconPlus />
-                  <span>List Tool</span>
+                  <span>Post Tool</span>
                 </button>
-              </div>
+              </nav>
 
+              {/* Reset Tool */}
               <button
-                onClick={() => { if (confirm('Reset to default seed data?')) { const r = localDb.reset(); setTools(r.tools); setBorrows(r.borrows); } }}
-                className="text-[11px] text-slate-400 hover:text-slate-200 border border-slate-800 px-2.5 py-1 rounded-lg hover:bg-slate-800"
+                onClick={() => {
+                  if (confirm('Reset database to initial seed data?')) {
+                    const r = localDb.reset();
+                    setTools(r.tools);
+                    setBorrows(r.borrows);
+                  }
+                }}
+                className="hidden md:flex text-[11px] text-slate-400 hover:text-slate-200 border border-slate-800 px-2.5 py-1.5 rounded-lg hover:bg-slate-800 items-center gap-1"
+                title="Reset local storage seed"
               >
                 Reset DB
               </button>
             </div>
           </header>
 
-          {/* Main Body */}
+          {/* Body Views */}
           <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full">
+
+            {/* TAB 1: CATALOG */}
             {tab === 'catalog' && (
               <div className="space-y-6">
-                {/* Metrics */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div className="bg-slate-900 text-white p-5 rounded-2xl border border-slate-800">
-                    <span className="text-[10px] font-bold text-amber-400 uppercase tracking-widest">Repository</span>
-                    <h3 className="text-2xl font-extrabold mt-1">{tools.length} Tools</h3>
-                    <p className="text-xs text-slate-400 mt-1">Shared campus inventory for student use</p>
-                  </div>
-                  <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Available</span>
-                    <h3 className="text-2xl font-extrabold text-emerald-600 mt-1">{tools.filter(t => t.status === 'Available').length} Ready</h3>
-                    <p className="text-xs text-slate-500 mt-1">Can be checked out instantly</p>
-                  </div>
-                  <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Circulation</span>
-                    <h3 className="text-2xl font-extrabold text-amber-600 mt-1">{activeBorrows.length} In Use</h3>
-                    <p className="text-xs text-slate-500 mt-1">Active peer-to-peer student loans</p>
-                  </div>
-                </div>
-
-                {/* Search & Categories */}
-                <div className="bg-white p-3 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row gap-3 items-center justify-between">
-                  <div className="relative w-full md:w-80">
+                {/* Search & Categories Bar */}
+                <div className="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col lg:flex-row gap-3 items-center justify-between">
+                  <div className="relative w-full lg:w-96">
                     <span className="absolute left-3.5 top-3 text-slate-400"><IconSearch /></span>
                     <input
                       type="text"
-                      placeholder="Search tools, motors, kits..."
+                      placeholder="Search tools, model, owner, or accessories..."
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-amber-500/20 focus:outline-none"
+                      className="w-full pl-10 pr-4 py-2 bg-slate-50 hover:bg-slate-100/70 focus:bg-white rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 focus:outline-none transition"
                     />
                   </div>
 
-                  <div className="flex gap-1.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0">
+                  <div className="flex gap-1.5 overflow-x-auto w-full lg:w-auto pb-1 lg:pb-0">
                     {['All', 'Power Tools', 'Hand Tools', 'Gardening', 'Measurement'].map(cat => (
                       <button
                         key={cat}
-                        onClick={() => setCatFilter(cat)}
+                        onClick={() => setCategoryFilter(cat)}
                         className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition ${
-                          catFilter === cat ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                          categoryFilter === cat ? 'bg-slate-950 text-white shadow-sm' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                         }`}
                       >
                         {cat}
@@ -334,78 +408,106 @@
                 </div>
 
                 {/* Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                  {filteredTools.map(tool => (
-                    <div key={tool.id} className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col justify-between">
-                      <div>
-                        <div className="relative h-44 bg-slate-100">
-                          <img src={tool.image} alt={tool.name} className="w-full h-full object-cover" />
-                          <span className={`absolute top-3 right-3 text-[11px] font-bold px-2.5 py-0.5 rounded-full ${
-                            tool.status === 'Available' ? 'bg-emerald-500 text-white' : 'bg-slate-900/80 text-amber-300'
-                          }`}>
-                            {tool.status}
-                          </span>
-                          <span className="absolute bottom-3 left-3 text-[10px] font-mono px-2 py-0.5 rounded bg-slate-900/80 text-white">
-                            {tool.category}
-                          </span>
-                        </div>
-                        <div className="p-4">
-                          <h4 className="font-bold text-slate-900 text-sm line-clamp-1">{tool.name}</h4>
-                          <p className="text-xs text-slate-500 mt-1 line-clamp-2">{tool.description}</p>
-                          <div className="mt-3 pt-3 border-t border-slate-100 flex justify-between text-xs text-slate-500">
-                            <span>Custodian: <strong className="text-slate-700">{tool.owner}</strong></span>
-                            <span className="font-mono font-bold text-slate-900">₹{tool.deposit}</span>
+                {filteredTools.length === 0 ? (
+                  <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-slate-300">
+                    <p className="font-bold text-slate-700 text-sm">No items found matching criteria</p>
+                    <p className="text-xs text-slate-400 mt-1">Try relaxing filters or search terms</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                    {filteredTools.map(tool => (
+                      <div key={tool.id} className="group bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm hover:shadow-xl hover:border-slate-300 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                          <div className="relative h-48 bg-slate-950 overflow-hidden">
+                            <img
+                              src={tool.image}
+                              alt={tool.name}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                              onError={(e) => {
+                                e.target.src = 'https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=600&q=80';
+                              }}
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent"></div>
+
+                            <span className={`absolute top-3 right-3 text-[11px] font-bold px-2.5 py-1 rounded-full backdrop-blur-md shadow-sm ${
+                              tool.status === 'Available' ? 'bg-emerald-500/90 text-white' : 'bg-slate-900/80 text-amber-300 border border-amber-500/30'
+                            }`}>
+                              {tool.status}
+                            </span>
+                            <span className="absolute bottom-3 left-3 text-[10px] font-mono tracking-wider uppercase px-2 py-0.5 rounded bg-slate-950/80 text-slate-200 backdrop-blur-md">
+                              {tool.category}
+                            </span>
+                          </div>
+
+                          <div className="p-4">
+                            <h4 className="font-bold text-slate-900 text-sm line-clamp-1 group-hover:text-amber-600 transition">{tool.name}</h4>
+                            <p className="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">{tool.description}</p>
+                            
+                            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                              <span className="truncate max-w-[130px]">Owner: <strong className="text-slate-800 font-semibold">{tool.owner}</strong></span>
+                              <span className="font-mono font-bold text-slate-900">₹{tool.deposit}</span>
+                            </div>
                           </div>
                         </div>
+
+                        <div className="p-4 pt-0">
+                          <button
+                            disabled={tool.status !== 'Available'}
+                            onClick={() => setSelectedTool(tool)}
+                            className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all duration-200 ${
+                              tool.status === 'Available'
+                                ? 'bg-slate-950 hover:bg-amber-500 hover:text-slate-950 text-white shadow-md'
+                                : 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                            }`}
+                          >
+                            {tool.status === 'Available' ? 'Request Equipment' : 'Issued to Peer'}
+                          </button>
+                        </div>
                       </div>
-                      <div className="p-4 pt-0">
-                        <button
-                          disabled={tool.status !== 'Available'}
-                          onClick={() => setSelectedTool(tool)}
-                          className={`w-full py-2.5 rounded-xl text-xs font-bold transition ${
-                            tool.status === 'Available'
-                              ? 'bg-slate-900 hover:bg-amber-500 hover:text-slate-950 text-white shadow-sm'
-                              : 'bg-slate-100 text-slate-400 cursor-not-allowed'
-                          }`}
-                        >
-                          {tool.status === 'Available' ? 'Borrow Equipment' : 'Issued to Peer'}
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 
+            {/* TAB 2: LOANS & CHECKOUTS */}
             {tab === 'borrows' && (
               <div className="space-y-6">
                 <div>
-                  <h3 className="font-bold text-slate-900 text-base mb-1">Active Tool Checkouts</h3>
-                  <p className="text-xs text-slate-500 mb-4">Track ongoing student loans and mark items as returned</p>
-                  
+                  <h3 className="font-bold text-slate-900 text-lg">Active Checkout Records</h3>
+                  <p className="text-xs text-slate-500 mb-4">Track due dates, loan periods, and process returns</p>
+
                   {activeBorrows.length === 0 ? (
                     <div className="bg-white p-12 text-center rounded-2xl border border-dashed border-slate-300">
-                      <p className="font-semibold text-slate-700 text-sm">No active loans</p>
-                      <p className="text-xs text-slate-400 mt-1">All library items are currently returned and in stock.</p>
+                      <p className="font-bold text-slate-700 text-sm">All equipment accounted for</p>
+                      <p className="text-xs text-slate-400 mt-1">No outstanding checked-out gear at this moment.</p>
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {activeBorrows.map(item => (
-                        <div key={item.id} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex justify-between items-center">
+                        <div key={item.id} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
                           <div>
-                            <span className="text-[10px] font-mono uppercase bg-amber-50 text-amber-700 font-bold px-2 py-0.5 rounded border border-amber-200">
-                              {item.category}
-                            </span>
-                            <h4 className="font-bold text-slate-900 mt-1">{item.toolName}</h4>
-                            <p className="text-xs text-slate-500 mt-1">Borrower: <strong className="text-slate-700">{item.borrower}</strong></p>
-                            <p className="text-xs text-amber-700 font-semibold mt-0.5">Due Date: {item.dueDate}</p>
+                            <div className="flex justify-between items-center">
+                              <span className="text-[10px] font-mono uppercase bg-amber-50 text-amber-700 font-bold px-2 py-0.5 rounded border border-amber-200">
+                                {item.category}
+                              </span>
+                              <span className="text-xs font-bold text-amber-600">Due: {item.dueDate}</span>
+                            </div>
+
+                            <h4 className="font-bold text-slate-900 mt-2 text-base">{item.toolName}</h4>
+                            <p className="text-xs text-slate-500 mt-1">Borrower: <strong className="text-slate-800">{item.borrower}</strong></p>
+                            <p className="text-[11px] text-slate-400">Issued On: {item.borrowDate}</p>
                           </div>
-                          <button
-                            onClick={() => handleReturn(item.id)}
-                            className="flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-2 rounded-xl transition"
-                          >
-                            <IconRotate /> Mark Return
-                          </button>
+
+                          <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center">
+                            <span className="text-xs text-slate-500">Status: <strong className="text-amber-600">In Active Use</strong></span>
+                            <button
+                              onClick={() => handleReturn(item.id)}
+                              className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3.5 py-1.5 rounded-xl transition"
+                            >
+                              <IconRotate /> Mark Returned
+                            </button>
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -414,15 +516,15 @@
 
                 {borrows.filter(b => b.status === 'Returned').length > 0 && (
                   <div>
-                    <h4 className="font-bold text-slate-700 text-xs uppercase tracking-wider mb-2">Audit History</h4>
-                    <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden text-xs">
+                    <h4 className="font-bold text-slate-700 text-xs uppercase tracking-wider mb-2">Loan Audit & Return Ledger</h4>
+                    <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden text-xs shadow-sm">
                       {borrows.filter(b => b.status === 'Returned').map(b => (
-                        <div key={b.id} className="p-3.5 border-b border-slate-100 flex justify-between items-center">
+                        <div key={b.id} className="p-3.5 border-b border-slate-100 flex justify-between items-center hover:bg-slate-50">
                           <div>
                             <span className="font-semibold text-slate-900">{b.toolName}</span>
                             <span className="text-slate-400 ml-2">by {b.borrower}</span>
                           </div>
-                          <span className="text-emerald-700 font-medium">Returned on {b.returnedDate}</span>
+                          <span className="text-emerald-700 font-medium">Checked in on {b.returnedDate}</span>
                         </div>
                       ))}
                     </div>
@@ -431,18 +533,149 @@
               </div>
             )}
 
+            {/* TAB 3: DASHBOARD & ANALYTICS */}
+            {tab === 'dashboard' && (
+              <div className="space-y-6">
+                <div>
+                  <h3 className="font-bold text-slate-900 text-lg">System Dashboard & Performance</h3>
+                  <p className="text-xs text-slate-500">Overview of resource circulation across campus</p>
+                </div>
+
+                {/* Metric Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                  <div className="bg-slate-900 text-white p-5 rounded-2xl border border-slate-800 shadow">
+                    <span className="text-[10px] font-bold text-amber-400 uppercase tracking-widest">Total Inventory</span>
+                    <h4 className="text-3xl font-extrabold mt-1">{tools.length}</h4>
+                    <p className="text-xs text-slate-400 mt-1">Catalogued gear</p>
+                  </div>
+
+                  <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Available Now</span>
+                    <h4 className="text-3xl font-extrabold text-emerald-600 mt-1">{availableTools.length}</h4>
+                    <p className="text-xs text-slate-500 mt-1">Ready for check out</p>
+                  </div>
+
+                  <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">On Active Loan</span>
+                    <h4 className="text-3xl font-extrabold text-amber-600 mt-1">{activeBorrows.length}</h4>
+                    <p className="text-xs text-slate-500 mt-1">Circulating in projects</p>
+                  </div>
+
+                  <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Utilization</span>
+                    <h4 className="text-3xl font-extrabold text-slate-900 mt-1">
+                      {tools.length > 0 ? Math.round((activeBorrows.length / tools.length) * 100) : 0}%
+                    </h4>
+                    <p className="text-xs text-slate-500 mt-1">Equipment efficiency</p>
+                  </div>
+                </div>
+
+                {/* Category Distribution Bar */}
+                <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                  <h4 className="font-bold text-slate-900 text-sm mb-3">Inventory by Department Category</h4>
+                  <div className="space-y-3">
+                    {['Power Tools', 'Hand Tools', 'Gardening', 'Measurement'].map(c => {
+                      const count = tools.filter(t => t.category === c).length;
+                      const pct = tools.length > 0 ? Math.round((count / tools.length) * 100) : 0;
+                      return (
+                        <div key={c} className="space-y-1">
+                          <div className="flex justify-between text-xs">
+                            <span className="font-medium text-slate-700">{c}</span>
+                            <span className="text-slate-500">{count} items ({pct}%)</span>
+                          </div>
+                          <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                            <div className="h-full bg-amber-500 rounded-full transition-all duration-500" style={{ width: `${pct}%` }}></div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* TAB 4: MY INVENTORY & MANAGEMENT */}
+            {tab === 'mylistings' && (
+              <div className="space-y-6">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h3 className="font-bold text-slate-900 text-lg">Equipment Management</h3>
+                    <p className="text-xs text-slate-500">Edit, inspect, or retire items from the shared database</p>
+                  </div>
+                  <button
+                    onClick={() => setTab('list')}
+                    className="flex items-center gap-1 bg-slate-900 hover:bg-amber-500 hover:text-slate-950 text-white text-xs font-bold px-3 py-2 rounded-xl transition"
+                  >
+                    <IconPlus /> Add Item
+                  </button>
+                </div>
+
+                <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase font-semibold">
+                      <tr>
+                        <th className="p-3.5 pl-5">Tool</th>
+                        <th className="p-3.5">Category</th>
+                        <th className="p-3.5">Custodian</th>
+                        <th className="p-3.5">Deposit</th>
+                        <th className="p-3.5">Status</th>
+                        <th className="p-3.5 text-right pr-5">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 text-slate-600">
+                      {tools.map(tool => (
+                        <tr key={tool.id} className="hover:bg-slate-50 transition">
+                          <td className="p-3.5 pl-5 font-semibold text-slate-900 flex items-center gap-3">
+                            <img src={tool.image} className="w-8 h-8 rounded-lg object-cover border border-slate-200" />
+                            <span>{tool.name}</span>
+                          </td>
+                          <td className="p-3.5 font-mono text-[11px]">{tool.category}</td>
+                          <td className="p-3.5">{tool.owner}</td>
+                          <td className="p-3.5 font-mono">₹{tool.deposit}</td>
+                          <td className="p-3.5">
+                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                              tool.status === 'Available' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
+                            }`}>
+                              {tool.status}
+                            </span>
+                          </td>
+                          <td className="p-3.5 text-right pr-5">
+                            <button
+                              onClick={() => handleDeleteTool(tool.id)}
+                              className="p-1.5 text-slate-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition"
+                              title="Delete Item"
+                            >
+                              <IconTrash />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* TAB 5: POST A TOOL WITH IMAGE UPLOAD */}
             {tab === 'list' && (
-              <div className="max-w-xl mx-auto bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm">
-                <h3 className="text-lg font-bold text-slate-900">List an Asset for Sharing</h3>
-                <p className="text-xs text-slate-500 mt-0.5 mb-6">Contribute your tool to the campus library registry</p>
+              <div className="max-w-2xl mx-auto bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xl">
+                <div className="flex items-center gap-3 mb-6 pb-5 border-b border-slate-100">
+                  <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center font-black">
+                    <IconPlus />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-slate-900">List an Asset for Lending</h3>
+                    <p className="text-xs text-slate-500">Provide photos and hardware specifications for students to borrow</p>
+                  </div>
+                </div>
 
                 <form onSubmit={handleCreateTool} className="space-y-4 text-xs">
                   <div>
-                    <label className="block font-semibold text-slate-700 mb-1">Tool / Machine Name *</label>
+                    <label className="block font-semibold text-slate-700 mb-1">Equipment Name & Model *</label>
                     <input
                       type="text"
                       required
-                      placeholder="e.g. DeWalt 800W Rotary Hammer Drill"
+                      placeholder="e.g. Bosch GKS 190 Professional Circular Saw"
                       value={newTool.name}
                       onChange={(e) => setNewTool({ ...newTool, name: e.target.value })}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
@@ -463,34 +696,118 @@
                         <option>Measurement</option>
                       </select>
                     </div>
+
                     <div>
-                      <label className="block font-semibold text-slate-700 mb-1">Deposit (₹)</label>
+                      <label className="block font-semibold text-slate-700 mb-1">Caution Deposit (₹)</label>
                       <input
                         type="number"
                         value={newTool.deposit}
                         onChange={(e) => setNewTool({ ...newTool, deposit: Number(e.target.value) })}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-mono"
                       />
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block font-semibold text-slate-700 mb-1">Custodian / Owner *</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="Your Name (Roll No. / Lab Name)"
-                      value={newTool.owner}
-                      onChange={(e) => setNewTool({ ...newTool, owner: e.target.value })}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200"
-                    />
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block font-semibold text-slate-700 mb-1">Owner / Department *</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Rahul Verma (ME-301)"
+                        value={newTool.owner}
+                        onChange={(e) => setNewTool({ ...newTool, owner: e.target.value })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-semibold text-slate-700 mb-1">Physical Condition</label>
+                      <select
+                        value={newTool.condition}
+                        onChange={(e) => setNewTool({ ...newTool, condition: e.target.value })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white"
+                      >
+                        <option>Brand New</option>
+                        <option>Like New</option>
+                        <option>Good</option>
+                        <option>Fair / Functional</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* IMAGE UPLOAD / URL SWITCHER */}
+                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                    <div className="flex justify-between items-center">
+                      <label className="block font-bold text-slate-800">Add Tool Photograph</label>
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setImageMode('file')}
+                          className={`px-2.5 py-1 rounded-lg text-[10px] font-bold ${
+                            imageMode === 'file' ? 'bg-slate-900 text-white' : 'bg-white border text-slate-600'
+                          }`}
+                        >
+                          Upload File
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setImageMode('url')}
+                          className={`px-2.5 py-1 rounded-lg text-[10px] font-bold ${
+                            imageMode === 'url' ? 'bg-slate-900 text-white' : 'bg-white border text-slate-600'
+                          }`}
+                        >
+                          Image Link (URL)
+                        </button>
+                      </div>
+                    </div>
+
+                    {imageMode === 'file' ? (
+                      <div>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageFileChange}
+                          className="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100 cursor-pointer"
+                        />
+                        <p className="text-[10px] text-slate-400 mt-1">Upload JPG, PNG or WebP from your device (Max 2MB)</p>
+                      </div>
+                    ) : (
+                      <div>
+                        <input
+                          type="url"
+                          placeholder="https://images.unsplash.com/photo-..."
+                          value={newTool.image}
+                          onChange={(e) => setNewTool({ ...newTool, image: e.target.value })}
+                          className="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-white font-mono text-[11px]"
+                        />
+                      </div>
+                    )}
+
+                    {/* Image Preview */}
+                    {newTool.image && (
+                      <div className="mt-2 flex items-center gap-3 p-2 bg-white rounded-lg border border-slate-200">
+                        <img src={newTool.image} className="w-16 h-12 object-cover rounded-md" alt="Preview" />
+                        <div className="flex-1 overflow-hidden">
+                          <span className="text-[10px] font-bold text-emerald-600 block">Image Ready</span>
+                          <span className="text-[10px] text-slate-400 truncate block">Will be displayed on public catalog</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setNewTool(prev => ({ ...prev, image: '' }))}
+                          className="text-xs text-red-500 hover:text-red-700 p-1"
+                        >
+                          Clear
+                        </button>
+                      </div>
+                    )}
                   </div>
 
                   <div>
-                    <label className="block font-semibold text-slate-700 mb-1">Description & Condition Notes</label>
+                    <label className="block font-semibold text-slate-700 mb-1">Description & Included Bits/Cables</label>
                     <textarea
                       rows="3"
-                      placeholder="Specify drill bit sizes, cord lengths, voltage, or pickup notes..."
+                      placeholder="Mention battery type, safety guards, or special usage requirements..."
                       value={newTool.description}
                       onChange={(e) => setNewTool({ ...newTool, description: e.target.value })}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200"
@@ -499,33 +816,33 @@
 
                   <button
                     type="submit"
-                    className="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-xl shadow transition mt-2 text-xs"
+                    className="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold rounded-xl shadow transition text-xs"
                   >
-                    Add Tool to Live Catalog
+                    Publish to Campus Directory
                   </button>
                 </form>
               </div>
             )}
           </main>
 
-          {/* Borrow Modal */}
+          {/* Borrow Confirmation Modal */}
           {selectedTool && (
             <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-              <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-200 relative">
+              <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 relative">
                 <button onClick={() => setSelectedTool(null)} className="absolute right-4 top-4 text-slate-400 hover:text-slate-700">
                   <IconClose />
                 </button>
-                <span className="text-[10px] font-mono text-amber-600 font-bold uppercase tracking-wider">Loan Authorization</span>
+                <span className="text-[10px] font-mono text-amber-600 font-bold uppercase tracking-wider">Loan Confirmation</span>
                 <h3 className="font-bold text-slate-900 text-lg mt-1">{selectedTool.name}</h3>
-                <p className="text-xs text-slate-500">Lender: {selectedTool.owner}</p>
+                <p className="text-xs text-slate-500">Asset owner: {selectedTool.owner}</p>
 
                 <form onSubmit={handleConfirmBorrow} className="mt-4 space-y-3.5 text-xs">
                   <div>
-                    <label className="block font-semibold text-slate-700 mb-1">Borrower Name & ID *</label>
+                    <label className="block font-semibold text-slate-700 mb-1">Your Name / Student Roll No. *</label>
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Student 2nd Year (SE-042)"
+                      placeholder="e.g. Priya Shah (SE-089)"
                       value={borrowerName}
                       onChange={(e) => setBorrowerName(e.target.value)}
                       className="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
@@ -540,12 +857,12 @@
                       max="14"
                       value={loanDays}
                       onChange={(e) => setLoanDays(e.target.value)}
-                      className="w-full px-3.5 py-2 rounded-xl border border-slate-200"
+                      className="w-full px-3.5 py-2 rounded-xl border border-slate-200 font-mono"
                     />
                   </div>
 
                   <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-slate-600 text-[11px]">
-                    Caution Deposit: <strong className="text-slate-900">₹{selectedTool.deposit}</strong> (Refunded on check-in).
+                    Caution Deposit: <strong className="text-slate-900 font-mono">₹{selectedTool.deposit}</strong> (Refunded upon check-in without damage).
                   </div>
 
                   <div className="flex justify-end gap-2 pt-2">
@@ -558,7 +875,7 @@
                     </button>
                     <button
                       type="submit"
-                      className="px-4 py-2 bg-slate-900 hover:bg-amber-500 hover:text-slate-950 text-white rounded-xl font-bold transition"
+                      className="px-4 py-2 bg-slate-950 hover:bg-amber-500 hover:text-slate-950 text-white rounded-xl font-bold transition"
                     >
                       Confirm Checkout
                     </button>
@@ -569,7 +886,7 @@
           )}
 
           <footer className="border-t border-slate-200 bg-white py-4 text-center text-xs text-slate-400">
-            ToolShare Library • 2nd Year Field Project • GitHub Pages Ready
+            ToolShare Library • 2nd Year Field Project • Persistent Local Database
           </footer>
         </div>
       );

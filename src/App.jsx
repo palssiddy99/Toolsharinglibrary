@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Catalog from './components/Catalog';
 import MyBorrows from './components/MyBorrows';
 import ListTool from './components/ListTool';
+import { Calendar, ShieldAlert, X } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('catalog');
@@ -50,7 +51,7 @@ export default function App() {
   };
 
   const handleResetData = () => {
-    if (window.confirm('Reset database back to initial seed data?')) {
+    if (window.confirm('Reset local database back to default seed records?')) {
       const { tools: t, borrows: b } = localDb.resetDefaults();
       setTools(t);
       setBorrows(b);
@@ -60,11 +61,12 @@ export default function App() {
   const activeBorrowCount = borrows.filter(b => b.status === 'Active').length;
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans">
+    <div className="min-h-screen flex flex-col bg-[#f8fafc] text-slate-900 selection:bg-amber-400 selection:text-slate-950 font-sans">
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         borrowCount={activeBorrowCount}
+        totalTools={tools.length}
         onResetData={handleResetData}
       />
 
@@ -82,55 +84,66 @@ export default function App() {
         )}
       </main>
 
-      {/* Borrow Confirmation Modal */}
+      {/* Modal Dialog */}
       {selectedToolForBorrow && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-xl border border-slate-200">
-            <h3 className="text-lg font-bold text-slate-800">Borrow {selectedToolForBorrow.name}</h3>
-            <p className="text-xs text-slate-500 mt-1">Lender: {selectedToolForBorrow.owner}</p>
+        <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 relative">
+            <button
+              onClick={() => setSelectedToolForBorrow(null)}
+              className="absolute right-4 top-4 text-slate-400 hover:text-slate-700 p-1 rounded-lg hover:bg-slate-100"
+            >
+              <X className="w-4 h-4" />
+            </button>
 
-            <form onSubmit={confirmBorrow} className="mt-4 space-y-4 text-sm">
+            <span className="text-[10px] font-mono uppercase tracking-widest text-amber-600 font-bold">Lending Authorization</span>
+            <h3 className="text-lg font-extrabold text-slate-900 mt-1">{selectedToolForBorrow.name}</h3>
+            <p className="text-xs text-slate-500">Asset custodian: <strong>{selectedToolForBorrow.owner}</strong></p>
+
+            <form onSubmit={confirmBorrow} className="mt-5 space-y-4 text-xs">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Your Name / Student ID *</label>
+                <label className="block font-semibold text-slate-700 mb-1">Student Name & ID *</label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Student 2nd Year - S104"
+                  placeholder="e.g., Alex Carter (SE-2026-081)"
                   value={borrowerName}
                   onChange={(e) => setBorrowerName(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Duration (Days)</label>
+                <label className="block font-semibold text-slate-700 mb-1">Requested Loan Period (Days)</label>
                 <input
                   type="number"
                   min="1"
                   max="14"
                   value={durationDays}
                   onChange={(e) => setDurationDays(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 font-mono"
                 />
               </div>
 
-              <div className="p-3 bg-amber-50 rounded-lg text-amber-800 text-xs">
-                Ref. Deposit: <strong>₹{selectedToolForBorrow.deposit * 50}</strong> (Refundable upon inspection).
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 flex items-start gap-2.5">
+                <ShieldAlert className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                <p className="text-[11px] text-slate-600 leading-relaxed">
+                  Required Caution Deposit: <strong className="text-slate-900">₹{selectedToolForBorrow.deposit * 50}</strong>. Fully released upon checking in without structural defects.
+                </p>
               </div>
 
-              <div className="flex gap-2 justify-end pt-2">
+              <div className="flex gap-2.5 justify-end pt-2">
                 <button
                   type="button"
                   onClick={() => setSelectedToolForBorrow(null)}
-                  className="px-4 py-2 border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-100 text-xs font-medium"
+                  className="px-4 py-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100 font-semibold"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-semibold"
+                  className="px-5 py-2 bg-slate-950 hover:bg-amber-500 hover:text-slate-950 text-white font-bold rounded-xl transition-all duration-200 shadow-md"
                 >
-                  Confirm Borrow
+                  Authorize Checkout
                 </button>
               </div>
             </form>
@@ -138,8 +151,8 @@ export default function App() {
         </div>
       )}
 
-      <footer className="border-t border-slate-200 bg-white py-4 text-center text-xs text-slate-400">
-        ToolShare Library • 2nd Year Academic Field Project • Built with React & Local Storage DB
+      <footer className="border-t border-slate-200 bg-white py-5 text-center text-xs text-slate-400">
+        ToolShare Enterprise Portal • Field Project Demonstration • Local Engine v2.0
       </footer>
     </div>
   );
